@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F67E38
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akron.Web", "Akron.Web\Akron.Web.csproj", "{BD05565B-311A-469B-9030-53FDF98EF4E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akron.Data", "Akron.Data\Akron.Data.csproj", "{C5601EA2-6121-47E5-A89E-C8230C2928D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{BD05565B-311A-469B-9030-53FDF98EF4E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD05565B-311A-469B-9030-53FDF98EF4E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD05565B-311A-469B-9030-53FDF98EF4E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
