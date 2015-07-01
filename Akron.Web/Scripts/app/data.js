@@ -4,6 +4,7 @@ var mainDim = null;
 var mainGroup = null;
 var processedData = null;
 var chart = dc.lineChart("#chart");
+var barChart = dc.barChart("#barChart");
 var allGroup = null;
 var allDim = null;
 var group1 = null;
@@ -19,7 +20,8 @@ function init() {
     
     d3.json(root + 'api/Incumbent', function (r) {
         data = r;
-
+        $('#recordCount').text(r.RecordCount);
+        $('#averageBasePay').text(r.TotalAverage);
         processed = d3.nest()
             .key(function (d) { return d[0]._value[1]._value; })
             .key(function (d) { return d[0]._value[0]._value; })
@@ -44,7 +46,8 @@ function init() {
             processedData.push(item);
         });
 
-
+        $('#orgTypeCount').text(dimensionKeys.length);
+        $('#yearCount').text(processed.length);
         ndx = crossfilter(processedData);
         mainDim = ndx.dimension(function (d) { return d.key; });
 
@@ -60,6 +63,38 @@ function init() {
             groups.push(group);
         }
 
+        allGroup = mainDim.group().reduce(function(p, v) {
+
+            ++p.count;
+
+            var found = false;
+            for (var i=0; i < p.values.length;i++) {
+                if (p.values[i].key == v.key)
+                    found = true;
+            }
+            if (!found) {
+                
+
+                var ct = 0;
+                var tot = 0;
+                for (var i = 0; i < dimensionKeys.length;i++) {
+                    if (v[dimensionKeys[i]] != null) {
+                        ++ct;
+                        tot += v[dimensionKeys[i]];
+                    }
+                }
+                p.values.push({ key: v.key, value: Math.floor(tot / ct) });
+            }
+           
+
+            
+            return p;
+        }, function(p, v) {
+            
+
+        }, function() {
+            return { count: 0, values:[] };
+        });
         chart
             .dimension(mainDim)
             .width(600)
@@ -80,14 +115,37 @@ function init() {
             return v / 1000;
         });
         chart.xAxis().tickFormat(function (v) {
-            return Math.floor(v).toString();
+            return v;
         });
         chart.stackLayout().out(function (d, y0, y) {
             d.y0 = 0;
             d.y = y;
         });
 
-        dc.renderAll();
+
+        barChart
+            .width(300)
+            .height(200)
+            .x(d3.scale.linear().domain([2006, 2012]))
+            .y(d3.scale.linear().domain([20000, 90000]))
+            .gap(1)
+            .brushOn(false)
+            .dimension(mainDim)
+            .group(allGroup)
+            .keyAccessor(function(d) {
+                return d.value.values[0].key;
+            })
+            .valueAccessor(function(d) {
+                return d.value.values[0].value;
+            });
+        barChart.yAxis().tickFormat(function (v) {
+            return v / 1000;
+        });
+        barChart.xAxis().tickFormat(function(d) {
+            return d.toString();
+        });
+        barChart.xAxis().ticks(7);
+            dc.renderAll();
 
     });
 }

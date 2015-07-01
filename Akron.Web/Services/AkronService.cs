@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using Akron.Data;
 using Akron.Web.Models;
@@ -13,7 +14,32 @@ namespace Akron.Web.Services
         {
             var result = new AkronModel();
             var ds = new DataService();
-            result.BasePayByYearAndOrgType = ds.GetByOrgType();
+            var tasks = new Task[3];
+            var basePayTask = new Task(() =>
+            {
+                result.BasePayByYearAndOrgType = ds.GetByOrgType();
+            });
+            tasks[0] = basePayTask;
+            tasks[0].Start();
+
+            var countTask = new Task(() =>
+            {
+                result.RecordCount = ds.GetTotalCount();
+            });
+
+            tasks[1] = countTask;
+            tasks[1].Start();
+
+            var averageTask = new Task(() =>
+            {
+                result.TotalAverage = (int) ds.Average();
+            });
+
+            tasks[2] = averageTask;
+            tasks[2].Start();
+
+            Task.WaitAll(tasks);
+
             return result;
         }
     }

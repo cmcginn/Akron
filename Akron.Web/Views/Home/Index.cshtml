@@ -8,10 +8,100 @@
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <div class="col-lg-8 col-md-10 col-sm-12">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-database fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div id="recordCount" class="medium"></div>
+                        <div>Total Records</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-institution fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="medium" id="orgTypeCount"></div>
+                        <div>Organization Types</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-calendar fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="medium" id="yearCount"></div>
+                        <div>Years</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-dollar fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="medium" id="averageBasePay"></div>
+                        <div>Average Base Pay</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-8 col-md-12 ">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i> Average Base Pay
+                <i class="fa fa-line-chart fa-fw"></i> Average Base Pay
                 <div class="pull-right">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -43,13 +133,13 @@
             <!-- /.panel-body -->
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <span>Legend</span>
+                <i class="fa fa-bar-chart fa-fw"></i>Total Average Base Pay
             </div>
             <div class="panel-body">
-            
+                <div id="barChart" class="col-sm-12 text-center"></div>
             </div>
         </div>
     </div>

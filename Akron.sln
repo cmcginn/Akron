@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akron.Web", "Akron.Web\Akro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akron.Data", "Akron.Data\Akron.Data.csproj", "{C5601EA2-6121-47E5-A89E-C8230C2928D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Akron.Tests", "Akron.Tests\Akron.Tests.csproj", "{63ADEAE4-9901-4C97-ACE3-FFFA91F1616F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5601EA2-6121-47E5-A89E-C8230C2928D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63ADEAE4-9901-4C97-ACE3-FFFA91F1616F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63ADEAE4-9901-4C97-ACE3-FFFA91F1616F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63ADEAE4-9901-4C97-ACE3-FFFA91F1616F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63ADEAE4-9901-4C97-ACE3-FFFA91F1616F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
