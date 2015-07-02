@@ -17,7 +17,7 @@ namespace Akron.Web.Services
             var tasks = new Task[3];
             var basePayTask = new Task(() =>
             {
-                result.BasePayByYearAndOrgType = ds.GetByOrgType();
+                result.BasePayByYearAndOrgType = ds.BasePayByYearOrgType();
             });
             tasks[0] = basePayTask;
             tasks[0].Start();

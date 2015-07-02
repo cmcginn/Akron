@@ -10,44 +10,52 @@ namespace Akron.Data
 {
     public class DataService
     {
-        public List<BsonDocument> GetByOrgType()
+        public List<BsonDocument> BasePayByYearOrgType()
         {
             var client = new MongoClient("mongodb://localhost:27017");
             var db = client.GetDatabase("hra");
-            var items = db.GetCollection<BsonDocument>("incumbentMap");
+            var items = db.GetCollection<BsonDocument>("basePayByYearOrgType");
 
-            var group = new BsonDocument
-            {
-                {
-                    "$group", new BsonDocument
-                    {
-                        {
-                            "_id", new BsonDocument
-                            {
-                                {"orgType", "$value.orgType"},
-                                {"year", "$value.year"},
-                            }
-
-                        },
-                        {
-                            "averageBasePay", new BsonDocument
-                            {
-                                {"$avg", "$value.basePay"}
-                            }
-                        }
-                    }
-
-                }
-            };
-            var pipeline = new[]
-            {
-                group
-            };
-            var result = items.AggregateAsync<BsonDocument>(pipeline).Result;
-
-            var myList = result.ToListAsync<BsonDocument>().Result;
-            return myList;
+            return items.Find(new BsonDocument()).ToListAsync().Result;
         }
+        //public List<BsonDocument> GetByOrgType()
+        //{
+        //    var client = new MongoClient("mongodb://localhost:27017");
+        //    var db = client.GetDatabase("hra");
+        //    var items = db.GetCollection<BsonDocument>("incumbentMap");
+
+        //    var group = new BsonDocument
+        //    {
+        //        {
+        //            "$group", new BsonDocument
+        //            {
+        //                {
+        //                    "_id", new BsonDocument
+        //                    {
+        //                        {"orgType", "$value.orgType"},
+        //                        {"year", "$value.year"},
+        //                    }
+
+        //                },
+        //                {
+        //                    "averageBasePay", new BsonDocument
+        //                    {
+        //                        {"$avg", "$value.basePay"}
+        //                    }
+        //                }
+        //            }
+
+        //        }
+        //    };
+        //    var pipeline = new[]
+        //    {
+        //        group
+        //    };
+        //    var result = items.AggregateAsync<BsonDocument>(pipeline).Result;
+
+        //    var myList = result.ToListAsync<BsonDocument>().Result;
+        //    return myList;
+        //}
 
         public double Average()
         {
