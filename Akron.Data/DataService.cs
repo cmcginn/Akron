@@ -10,23 +10,25 @@ namespace Akron.Data
 {
     public class DataService
     {
-        public List<BsonDocument> BasePayByYearOrgType()
+        public List<BsonDocument> BasePayByYearAndDimension(string collectionName)
         {
             var client = new MongoClient("mongodb://localhost:27017");
             var db = client.GetDatabase("hra");
-            var items = db.GetCollection<BsonDocument>("basePayByYearOrgType");
+            var items = db.GetCollection<BsonDocument>(collectionName);
 
             return items.Find(new BsonDocument()).ToListAsync().Result;
         }
 
-        public List<BsonDocument> CountByOrgType()
+        public List<BsonDocument> CountByDimension(string collectionName)
         {
             var client = new MongoClient("mongodb://localhost:27017");
             var db = client.GetDatabase("hra");
-            var items = db.GetCollection<BsonDocument>("countByOrgType");
+            var items = db.GetCollection<BsonDocument>(collectionName);
 
             return items.Find(new BsonDocument()).ToListAsync().Result;
         }
+
+
         //public List<BsonDocument> GetByOrgType()
         //{
         //    var client = new MongoClient("mongodb://localhost:27017");

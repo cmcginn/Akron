@@ -33,14 +33,14 @@ function init() {
         $('#recordCount').text(r.RecordCount);
         $('#averageBasePay').text(r.TotalAverage);
         var orgTypes = [];
-        data.BasePayByYearAndOrgType.forEach(function(d) {
+        data.BasePayByYearAndDimension.forEach(function(d) {
             var org = d[0]._value[1]._value;
             if (orgTypes.indexOf(org) < 0)
                 orgTypes.push(org);
         });
         $('#orgTypeCount').text(orgTypes.length);
-        ndx = crossfilter(data.BasePayByYearAndOrgType);
-        countNdx = crossfilter(data.CountByOrgType);
+        ndx = crossfilter(data.BasePayByYearAndDimension);
+        countNdx = crossfilter(data.CountByDimension);
 
         mainDim = ndx.dimension(function (d) {
             return [d[0]._value[0]._value,d[0]._value[1]._value];

@@ -17,7 +17,7 @@ namespace Akron.Web.Services
             var tasks = new Task[4];
             var basePayTask = new Task(() =>
             {
-                result.BasePayByYearAndOrgType = ds.BasePayByYearOrgType();
+                result.BasePayByYearAndDimension = ds.BasePayByYearAndDimension("basePayByYearJobFamily");
             });
             tasks[0] = basePayTask;
             tasks[0].Start();
@@ -40,7 +40,7 @@ namespace Akron.Web.Services
 
             var countByOrgTypeTask = new Task(() =>
             {
-                result.CountByOrgType = ds.CountByOrgType();
+                result.CountByDimension = ds.CountByDimension("countByJobFamily");
 
             });
             tasks[3] = countByOrgTypeTask;

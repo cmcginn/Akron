@@ -8,8 +8,8 @@ namespace Akron.Web.Models
 {
     public class AkronModel
     {
-        public List<BsonDocument> BasePayByYearAndOrgType { get; set; }
-        public List<BsonDocument> CountByOrgType { get; set; }
+        public List<BsonDocument> BasePayByYearAndDimension { get; set; }
+        public List<BsonDocument> CountByDimension { get; set; }
         public long RecordCount { get; set; }
 
         public int TotalAverage { get; set; }
