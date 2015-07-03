@@ -155,7 +155,7 @@ function init() {
                     .radiusValueAccessor(function (p) {
                         return (p.value.count / maximum) * 40;
                     })
-                    .maxBubbleRelativeSize(0.3)
+                    .maxBubbleRelativeSize(0.5)
                     .x(d3.scale.ordinal().domain(ordinals))
                     .xUnits(dc.units.ordinal)
                     .y(d3.scale.linear().domain([-5, 30]))
