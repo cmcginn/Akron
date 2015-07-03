@@ -10,14 +10,33 @@ namespace Akron.Web.Services
 {
     public class AkronService
     {
-        public AkronModel GetModel()
+        static string GetDimensionLabel(string collectionType)
+        {
+            string result = "";
+            switch (collectionType)
+            {
+                case "OrgType":
+                    result = "Organization Types";
+                    break;
+                case "JobFamily":
+                    result = "Job Families";
+                    break;
+                case "GeoGroup":
+                    result = "Geo Groups";
+                    break;
+                default: break;
+            }
+            return result;
+        }
+        public AkronModel GetModel(string collectionType)
         {
             var result = new AkronModel();
+            result.DimensionLabel = GetDimensionLabel(collectionType);
             var ds = new DataService();
             var tasks = new Task[4];
             var basePayTask = new Task(() =>
             {
-                result.BasePayByYearAndDimension = ds.BasePayByYearAndDimension("basePayByYearJobFamily");
+                result.BasePayByYearAndDimension = ds.BasePayByYearAndDimension(String.Format("basePayByYear{0}",collectionType));
             });
             tasks[0] = basePayTask;
             tasks[0].Start();
@@ -40,7 +59,7 @@ namespace Akron.Web.Services
 
             var countByOrgTypeTask = new Task(() =>
             {
-                result.CountByDimension = ds.CountByDimension("countByJobFamily");
+                result.CountByDimension = ds.CountByDimension(String.Format("countBy{0}",collectionType));
 
             });
             tasks[3] = countByOrgTypeTask;

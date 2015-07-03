@@ -15,13 +15,13 @@ namespace Akron.Web.ApiControllers
         // GET: api/Incumbent
         public AkronModel Get()
         {
-            return svc.GetModel();
+            return svc.GetModel("OrgType");
         }
 
         // GET: api/Incumbent/5
-        public string Get(int id)
+        public AkronModel Get(string id)
         {
-            return "value";
+            return svc.GetModel(id);
         }
 
         // POST: api/Incumbent

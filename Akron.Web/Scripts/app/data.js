@@ -2,98 +2,104 @@
 var ndx = null;
 var mainDim = null;
 var mainGroup = null;
-var processedData = null;
 var chart = dc.seriesChart("#chart");
 var barChart = dc.barChart("#barChart");
 var bubbleChart = dc.bubbleChart('#bubbleChart');
 
-var allGroup = null;
-var allDim = null;
-var group1 = null;
-var group2 = null;
-var group3 = null;
-var processed = [];
-var dimensionKeys = [];
-var processedData = [];
-var groups = [];
-var allOrgGroup = null;
-var mainFilter = null;
-var orgDim = null;
-var orgGroup = 0;
 var yearDim = null;
 var yearGroup = null;
 var ordinals;
 var countNdx = null;
-var countOrgDim = null;
-var countOrgGroup = null;
-function init() {
-    
-    d3.json(root + 'api/Incumbent', function (r) {
+var countDim = null;
+var countDimGroup = null;
+var colors = null;
+var mainGroupAll;
+var yearGroupAll = null;
+var countGroupAll = null;
+
+function init(dimensionType) {
+
+    d3.json(root + 'api/Incumbent/' + dimensionType, function (r) {
         data = r;
         $('#recordCount').text(r.RecordCount);
         $('#averageBasePay').text(r.TotalAverage);
-        var orgTypes = [];
-        data.BasePayByYearAndDimension.forEach(function(d) {
+        var dimTypes = [];
+        data.BasePayByYearAndDimension.forEach(function (d) {
             var org = d[0]._value[1]._value;
-            if (orgTypes.indexOf(org) < 0)
-                orgTypes.push(org);
+            if (dimTypes.indexOf(org) < 0)
+                dimTypes.push(org);
         });
-        $('#orgTypeCount').text(orgTypes.length);
+        $('#dimCount').text(dimTypes.length);
+        $('#dimLabel').text(r.DimensionLabel);
+
         ndx = crossfilter(data.BasePayByYearAndDimension);
         countNdx = crossfilter(data.CountByDimension);
 
         mainDim = ndx.dimension(function (d) {
-            return [d[0]._value[0]._value,d[0]._value[1]._value];
+            return [d[0]._value[0]._value, d[0]._value[1]._value];
         });
         yearDim = ndx.dimension(function (d) {
             return d[0]._value[0]._value;
         });
 
-        countOrgDim = countNdx.dimension(function(d) {
+        countDim = countNdx.dimension(function (d) {
             return d[0]._value;
         });
-        mainGroup = mainDim.group().reduceSum(function(d) {
+        mainGroup = mainDim.group().reduceSum(function (d) {
             return d[1]._value;
         });
-        countOrgGroup = countOrgDim.group().reduce(function(p, v) {
+        countDimGroup = countDim.group().reduce(function (p, v) {
             p.count = v[1]._value;
             return p;
-        }, function(p, v) {
-            
-        }, function() {
+        }, function (p, v) {
+
+        }, function () {
             return { count: 0 };
         });
-        yearGroup = yearDim.group().reduce(function(p, v) {
+        yearGroup = yearDim.group().reduce(function (p, v) {
             ++p.count;
             p.total += v[1]._value;
             p.average = Math.floor(p.total / p.count);
             return p;
-        }, function(p, v) {
-            
-        }, function() {
-            return {count:0,average:0,total:0};
+        }, function (p, v) {
+
+        }, function () {
+            return { count: 0, average: 0, total: 0 };
         });
 
+        mainGroupAll = mainGroup.all();
+        yearGroupAll = yearGroup.all();
+
+
+        var chartDomainMin = d3.min(mainGroupAll, function (d) { return d.value - (d.value * .20); });
+        var chartDomainMax = d3.max(mainGroupAll, function (d) { return d.value; });
+        var yearDomainMin = d3.min(yearGroupAll, function (d) { return d.key; });
+        var yearDomainMax = d3.max(yearGroupAll, function (d) { return d.key; });
+        var barDomainMinY = d3.min(yearGroupAll, function (d) { return d.value.average - (d.value.average * .10); });
+        var barDomainMaxY = d3.max(yearGroupAll, function (d) { return d.value.average; });
         $('#yearCount').text(yearGroup.all().length);
+
+
         chart
             .dimension(mainDim)
-            .width(600)
+            .width(1200)
             .height(400)
             .group(mainGroup)
-            .colors(d3.scale.category20b())
+            .colors(d3.scale.ordinal().range(myColors))
             .brushOn(false)
-            .legend(dc.legend().x(100).y(0).itemHeight(8).gap(5).autoItemWidth(true))
-            .y(d3.scale.linear().domain([40000, 130000]))
-            .x(d3.scale.linear().domain([2006, 2012]))
-            .keyAccessor(function(d) {
+            .legend(dc.legend().x(650).y(20).itemHeight(8).gap(5).autoItemWidth(true))
+            .y(d3.scale.linear().domain([chartDomainMin, chartDomainMax]))
+            .x(d3.scale.linear().domain([yearDomainMin, yearDomainMax]))
+            .keyAccessor(function (d) {
                 return d.key[0];
             })
-            .valueAccessor(function(d) {
+            .valueAccessor(function (d) {
                 return d.value;
             })
-            .seriesAccessor(function(d) {
-            return d.key[1];
-        });
+            .seriesAccessor(function (d) {
+                return d.key[1];
+            });
+
         chart.yAxis().tickFormat(function (v) {
             return v / 1000;
         });
@@ -101,32 +107,35 @@ function init() {
         chart.xAxis().tickFormat(function (v) {
             return v;
         });
-      
-
+        chart.yAxis().tickFormat(function (v) {
+            return v / 1000 + 'K';
+        });
+        chart.margins().right = 600;
+        chart.margins().left = 50;
         barChart
             .width(300)
             .height(200)
-            .x(d3.scale.linear().domain([2006, 2012]))
-            .y(d3.scale.linear().domain([20000, 90000]))
+            .x(d3.scale.linear().domain([yearDomainMin, yearDomainMax]))
+            .y(d3.scale.linear().domain([barDomainMinY, barDomainMaxY]))
             .gap(1)
             .brushOn(false)
             .dimension(yearDim)
             .group(yearGroup)
-            .keyAccessor(function(d) {
+            .keyAccessor(function (d) {
                 return d.key;
             })
-            .valueAccessor(function(d) {
-            return d.value.average;
-        });
+            .valueAccessor(function (d) {
+                return d.value.average;
+            });
         barChart.yAxis().tickFormat(function (v) {
-            return v / 1000;
+            return v / 1000 + 'K';
         });
-        barChart.xAxis().tickFormat(function(d) {
+        barChart.xAxis().tickFormat(function (d) {
             return d.toString();
         });
         barChart.xAxis().ticks(7);
         var ordinals = [];
-        var all = countOrgGroup.all();
+        var all = countDimGroup.all();
         all.forEach(function (d) {
             ordinals.push(d.key);
         });
@@ -136,9 +145,9 @@ function init() {
                     .height(250)
                     .transitionDuration(1500)
                     .margins({ top: 30, right: 50, bottom: 30, left: 40 })
-                    .dimension(countOrgDim)
+                    .dimension(countDim)
 
-                    .group(countOrgGroup)
+                    .group(countDimGroup)
                     .colorDomain([-0.0, 100.1])
                     .colors(d3.scale.category20b())
                     .yAxisPadding(20)
@@ -180,17 +189,22 @@ function init() {
             return v + '%';
         });
 
-        yearGroup.all().forEach(function(val) {
+        yearGroup.all().forEach(function (val) {
             var val = $('<tr><td>' + val.key + '</td><td>' + val.value.average + '</td></tr>');
 
             $('#totalsTable tbody').append(val);
         });
 
-            dc.renderAll();
+        dc.renderAll();
 
     });
 }
 
 $(function () {
-    init();
+    init('JobFamily');
+
+    $(document).on('click', '.dimensionSelect', function(e) {
+        var dimension = $(this).data('dimension');
+        init(dimension);
+    });
 });

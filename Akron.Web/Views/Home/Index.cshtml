@@ -39,11 +39,11 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-institution fa-5x"></i>
+                        <i class="fa fa-cubes fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="medium" id="orgTypeCount"></div>
-                        <div>Organization Types</div>
+                        <div class="medium" id="dimCount"></div>
+                        <div id="dimLabel"></div>
                     </div>
                 </div>
             </div>
@@ -114,13 +114,13 @@
                         </button>
                         <ul class="dropdown-menu pull-right" role="menu">
                             <li>
-                                <a href="#">Action</a>
+                                <a class="dimensionSelect" href="javascript:void(0)" data-dimension="OrgType">By Organization</a>
                             </li>
                             <li>
-                                <a href="#">Another action</a>
+                                <a class="dimensionSelect" href="javascript:void(0)" data-dimension="JobFamily">By Job Family</a>
                             </li>
                             <li>
-                                <a href="#">Something else here</a>
+                                <a class="dimensionSelect" href="javascript:void(0)" data-dimension="GeoGroup">By Geo Group</a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -166,7 +166,7 @@
     <div class="col-sm-12" id="bubbleChartWrap">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <i class="fa fa-group fa-fw"></i>Percentage of Total Respondents By Organization Type
+                <i class="fa fa-group fa-fw"></i>Percentage of Total Respondents
             </div>
             <div class="panel-body">
                 <div id="bubbleChart" class="col-sm-12 text-center">

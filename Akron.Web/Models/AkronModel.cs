@@ -11,7 +11,7 @@ namespace Akron.Web.Models
         public List<BsonDocument> BasePayByYearAndDimension { get; set; }
         public List<BsonDocument> CountByDimension { get; set; }
         public long RecordCount { get; set; }
-
+        public string DimensionLabel { get; set; }
         public int TotalAverage { get; set; }
     }
 }
