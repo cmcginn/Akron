@@ -18,6 +18,15 @@ namespace Akron.Data
 
             return items.Find(new BsonDocument()).ToListAsync().Result;
         }
+
+        public List<BsonDocument> CountByOrgType()
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var db = client.GetDatabase("hra");
+            var items = db.GetCollection<BsonDocument>("countByOrgType");
+
+            return items.Find(new BsonDocument()).ToListAsync().Result;
+        }
         //public List<BsonDocument> GetByOrgType()
         //{
         //    var client = new MongoClient("mongodb://localhost:27017");

@@ -14,7 +14,7 @@ namespace Akron.Web.Services
         {
             var result = new AkronModel();
             var ds = new DataService();
-            var tasks = new Task[3];
+            var tasks = new Task[4];
             var basePayTask = new Task(() =>
             {
                 result.BasePayByYearAndOrgType = ds.BasePayByYearOrgType();
@@ -37,6 +37,14 @@ namespace Akron.Web.Services
 
             tasks[2] = averageTask;
             tasks[2].Start();
+
+            var countByOrgTypeTask = new Task(() =>
+            {
+                result.CountByOrgType = ds.CountByOrgType();
+
+            });
+            tasks[3] = countByOrgTypeTask;
+            tasks[3].Start();
 
             Task.WaitAll(tasks);
 
