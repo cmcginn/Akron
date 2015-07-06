@@ -11,6 +11,7 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
+<a href="#" class="btn btn-primary ladda-button" data-style="expand-left"><span class="ladda-label">expand-left</span></a>
 <div class="row">
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-primary">
@@ -108,7 +109,7 @@
                 <i class="fa fa-line-chart fa-fw"></i> Average Base Pay
                 <div class="pull-right">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-primary btn-xs dropdown-toggle ladda-button" data-action="actions" data-style="zoom-out" data-toggle="dropdown" aria-expanded="false">
                             Actions
                             <span class="caret"></span>
                         </button>
@@ -121,10 +122,6 @@
                             </li>
                             <li>
                                 <a class="dimensionSelect" href="javascript:void(0)" data-dimension="GeoGroup">By Geo Group</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">Separated link</a>
                             </li>
                         </ul>
                     </div>
@@ -180,4 +177,12 @@
         @section scripts{
 
             <script src="@Url.Content("~/Scripts/app/data.js")"></script>
+            
+            <script>
+                $(function() {
+                    var l = Ladda.create(document.querySelector('.ladda-button'));
+                    l.toggle();
+                })
+            
+            </script>
         }

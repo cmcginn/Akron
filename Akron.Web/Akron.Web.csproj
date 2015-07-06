@@ -621,6 +621,9 @@
     <Content Include="Content\dist\js\sb-admin-2.js" />
     <Content Include="Content\js\flot-data.js" />
     <Content Include="Content\js\morris-data.js" />
+    <Content Include="Content\vendor\ladda-themeless.css" />
+    <Content Include="Content\vendor\ladda.css" />
+    <Content Include="Scripts\spin.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -948,6 +951,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\ladda.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />

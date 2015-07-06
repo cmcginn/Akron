@@ -5,7 +5,7 @@ var mainGroup = null;
 var chart = dc.seriesChart("#chart");
 var barChart = dc.barChart("#barChart");
 var bubbleChart = dc.bubbleChart('#bubbleChart');
-
+var actionBtn = Ladda.create(document.querySelector('button[data-action="actions"]'));
 var yearDim = null;
 var yearGroup = null;
 var ordinals;
@@ -23,6 +23,7 @@ function init(dimensionType) {
         data = r;
         $('#recordCount').text(r.RecordCount);
         $('#averageBasePay').text(r.TotalAverage);
+        $('#totalsTable tbody').empty();
         var dimTypes = [];
         data.BasePayByYearAndDimension.forEach(function (d) {
             var org = d[0]._value[1]._value;
@@ -139,9 +140,11 @@ function init(dimensionType) {
         all.forEach(function (d) {
             ordinals.push(d.key);
         });
-        var maximum = d3.sum(all, function (d) { return d.value.count; });
+        var totalCount = d3.sum(all, function (d) { return d.value.count; });
+        var maxCount = d3.max(all, function (d) { return d.value.count; });
+        var maxDomain = ((maxCount / totalCount) * 150);
         bubbleChart
-        .width(990)
+        .width(1200)
                     .height(250)
                     .transitionDuration(1500)
                     .margins({ top: 30, right: 50, bottom: 30, left: 40 })
@@ -153,27 +156,28 @@ function init(dimensionType) {
                     .yAxisPadding(20)
                     .colorDomain([0, 100])
                     .colorAccessor(function (d) {
-                        return Math.round((d.value.count / maximum) * 100);
+                        return Math.round((d.value.count / totalCount) * 100);
                     })
                     .keyAccessor(function (p) {
                         return p.key;
                     })
                     .valueAccessor(function (p) {
-                        return Math.round(((p.value.count / maximum) * 100), 4);
+                        return Math.round(((p.value.count / totalCount) * 100), 4);
                     })
                     .radiusValueAccessor(function (p) {
-                        return (p.value.count / maximum) * 40;
+                        return (p.value.count / totalCount) * 40;
                     })
                     .maxBubbleRelativeSize(0.5)
                     .x(d3.scale.ordinal().domain(ordinals))
                     .xUnits(dc.units.ordinal)
-                    .y(d3.scale.linear().domain([-5, 30]))
+                    .y(d3.scale.linear().domain([-5, maxDomain]))
                     .r(d3.scale.linear().domain([0, 100]))
                     .xAxisPadding(900)
                     .title(function (d) {
-                        return d.key + ':' + Math.round(((d.value.count / maximum) * 100), 2) + '%';
+                        return d.key + ':' + Math.round(((d.value.count / totalCount) * 100), 2) + '%';
                     })
                     .elasticX(true)
+
                     .yAxisPadding(100)
                     .xAxisPadding(500)
                     .renderHorizontalGridLines(true)
@@ -196,14 +200,17 @@ function init(dimensionType) {
         });
 
         dc.renderAll();
-
+        actionBtn.stop();
     });
 }
 
 $(function () {
+    
+
     init('JobFamily');
 
-    $(document).on('click', '.dimensionSelect', function(e) {
+    $(document).on('click', '.dimensionSelect', function (e) {
+        actionBtn.start();
         var dimension = $(this).data('dimension');
         init(dimension);
     });
