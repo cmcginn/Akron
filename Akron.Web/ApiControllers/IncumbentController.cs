@@ -4,24 +4,34 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Akron.Web.Models;
+using Akron.Data.DataStructures;
 using Akron.Web.Services;
+using MongoDB.Bson;
 
 namespace Akron.Web.ApiControllers
 {
     public class IncumbentController : ApiController
     {
-        private AkronService svc = new AkronService();
+       // private AkronService svc = new AkronService();
         // GET: api/Incumbent
-        public AkronModel Get()
+        public IEnumerable<BsonDocument> Get()
         {
-            return svc.GetModel("OrgType");
+            var svc = new Akron.Data.DataService();
+            var queryDoc = new QueryDocument();
+            var queryGroup = new GroupDefinition();
+            queryGroup.Slicers.Add("Year");
+            queryGroup.Slicers.Add("org_type");
+            queryGroup.Facts.Add(new FactDefinition {Name = "Base_Pay", Operation = AggregateOperations.Average});
+            queryDoc.CollectionName = "incumbent";
+            queryDoc.Group = queryGroup;
+            var result = svc.GetData(queryDoc);
+            return result;
         }
 
         // GET: api/Incumbent/5
-        public AkronModel Get(string id)
+        public string Get(int id)
         {
-            return svc.GetModel(id);
+            return "value";
         }
 
         // POST: api/Incumbent

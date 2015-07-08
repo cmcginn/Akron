@@ -54,6 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataService.cs" />
+    <Compile Include="DataStructures\AggregateOperations.cs" />
+    <Compile Include="DataStructures\FactDefinition.cs" />
+    <Compile Include="DataStructures\GroupDefinition.cs" />
+    <Compile Include="DataStructures\QueryDocument.cs" />
+    <Compile Include="Helpers\QueryBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

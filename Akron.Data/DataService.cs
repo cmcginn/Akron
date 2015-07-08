@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Akron.Data.DataStructures;
 using MongoDB.Bson;
 using MongoDB.Driver;
-
+using Akron.Data.Helpers;
 namespace Akron.Data
 {
     public class DataService
@@ -28,7 +29,22 @@ namespace Akron.Data
             return items.Find(new BsonDocument()).ToListAsync().Result;
         }
 
+        public List<BsonDocument> GetData(QueryDocument query)
+        {
+            var client = new MongoClient("mongodb://localhost:27017");
+            var db = client.GetDatabase("hra");
+            var items = db.GetCollection<BsonDocument>(query.CollectionName);
 
+            var g  = query.Group.ToGroup();
+            var pipeline = new[]
+                {
+                    g
+                };
+            var docs = items.AggregateAsync<BsonDocument>(pipeline).Result;
+            var result = docs.ToListAsync<BsonDocument>().Result;
+            return result;
+
+        }
         //public List<BsonDocument> GetByOrgType()
         //{
         //    var client = new MongoClient("mongodb://localhost:27017");

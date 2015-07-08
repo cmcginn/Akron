@@ -19,7 +19,7 @@ var countGroupAll = null;
 
 function init(dimensionType) {
 
-    d3.json(root + 'api/Incumbent/' + dimensionType, function (r) {
+    d3.json(root + 'api/RJI/' + dimensionType, function (r) {
         data = r;
         $('#recordCount').text(r.RecordCount);
         $('#averageBasePay').text(r.TotalAverage);

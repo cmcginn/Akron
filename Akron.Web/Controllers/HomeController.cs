@@ -13,6 +13,10 @@ namespace Akron.Web.Controllers
             return View();
         }
 
+        public ActionResult DC()
+        {
+            return View();
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
