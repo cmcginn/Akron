@@ -184,92 +184,105 @@
             
             <script>
                 var data = null;
-                var mainDim = null;
-                var mainGroup = null;
+                var categoryDim = null;
+                var categoryGroup = null;
                 var groups = [];
                 var ndx = null;
                 var allDims = [];
+                var cData = null;
+                var gData = [];
+                var graphs = [];
+                var categories = [];
                 d3.json(root + 'api/Incumbent/', function(r) {
 
                     data = r;
-                    ndx = crossfilter(data);
-                    mainDim = ndx.dimension(function(d) {
-                        return d[0]._value[0]._value;
-                    });
-                    mainGroup = mainDim.group().reduceSum(function(d) {
-                        return Math.floor(d[1]._value);
-                    });
-                    //forEach(mainGroup.all(), function(d) {
+
+                    cData = d3.nest()
+                        .key(function(d) { return d[0]._value[0]._value; })
+                        .key(function(d) { return d[0]._value[1]._value; })
+                        .rollup(function(d) {
+                            return Math.floor(d[0][1]._value);
+                        })
+                        .entries(data);
+
+
+                    for (var i = 0; i < cData.length; i++) {
+                        var item = cData[i];
+                        var itemVal = { category: +item.key };
+
+                        for (var j = 0; j < item.values.length; j++) {
+                            var val = item.values[j];
+                            if (categories.indexOf(val.key) < 0)
+                                categories.push(val.key);
+                            itemVal[val.key] = val.values;
+
+                        }
+
+
+                        gData.push(itemVal);
+                    }
+
+                    for (var i = 0; i < categories.length; i++) {
+                        var graph = {
+                            balloonText: "[[title]] - [[category]] $[[value]]",
+                            bullet: 'round',
+                            id: i,
+                            title: categories[i],
+                            valueField: categories[i]
+                        };
+                        graphs.push(graph);
+                    }
+
+                    doChart();
+
+//forEach(mainGroup.all(), function(d) {
                     //    allDims.push({})
                     //});
-                    doChart();
+                    //doChart();
                 });
                 $(function() {
                     //var l = Ladda.create(document.querySelector('.ladda-button'));
                     //l.toggle();
 
                 });
+
                 function doChart() {
-                    var chartData = mainGroup.all();
-                    var chart = AmCharts.makeChart("chartdiv", {
-                        "type": "serial",
-                        "theme": "light",
-                        "marginRight": 80,
-                        "autoMarginOffset": 20,
-                        "marginTop": 7,
-                        "dataProvider": chartData,
-                        "valueAxes": [
-                            {
-                                "axisAlpha": 0.2,
-                                "dashLength": 1,
-                                "position": "left"
-                            }
-                        ],
-                        "mouseWheelZoomEnabled": true,
-                        "graphs": [
-                            {
-                                "id": "g1",
-                                "balloonText": "[[category]]<br/><b><span style='font-size:14px;'>value: [[value]]</span></b>",
-                                "bullet": "round",
-                                "bulletBorderAlpha": 1,
-                                "bulletColor": "#FFFFFF",
-                                "hideBulletsCount": 50,
-                                "title": "red line",
-                                "valueField": "value",
-                                "useLineColorForBulletBorder": true
-                            }
-                        ],
-                        "chartScrollbar": {
-                            "autoGridCount": true,
-                            "graph": "g1",
-                            "scrollbarHeight": 40
-                        },
-                        "chartCursor": {
-
-                        },
-                        "categoryField": "key",
-                        "categoryAxis": {
-                            "parseDates": false,
-                            "axisColor": "#DADADA",
-                            "dashLength": 1,
-                            "minorGridEnabled": true
-                        },
-                        "export": {
-                            "enabled": true
+                    var chartData = null;
+                    AmCharts.makeChart("chartdiv",
+                        {
+                            "type": "serial",
+                            "categoryField": "category",
+                            "startDuration": 1,
+                            "categoryAxis": {
+                                "gridPosition": "start"
+                            },
+                            "trendLines": [],
+                            "graphs": graphs,
+                            "guides": [],
+                            "valueAxes": [
+                                {
+                                    "id": "ValueAxis-1",
+                                    "title": "Axis title"
+                                }
+                            ],
+                            "allLabels": [],
+                            "balloon": {},
+                            "legend": {
+                                "useGraphSettings": true
+                            },
+                            "titles": [
+                                {
+                                    "id": "Title-1",
+                                    "size": 15,
+                                    "text": "Chart Title"
+                                }
+                            ],
+                            "dataProvider": gData
                         }
-                    });
-
-                    chart.addListener("rendered", zoomChart);
-                    zoomChart();
-
-                    // this method is called when chart is first inited as we listen for "dataUpdated" event
-                    function zoomChart() {
-                        // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-                        chart.zoomToIndexes(chartData.length - 40, chartData.length - 1);
-                    }
+                    );
 
                 }
-               
+
 
                 // generate some random data, quite different range
                 function generateChartData() {
