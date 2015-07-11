@@ -10,7 +10,8 @@ namespace Akron.Web.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var r = new FilePathResult("~/index.html", "text/html");
+            return r;
         }
 
         public ActionResult DC()
