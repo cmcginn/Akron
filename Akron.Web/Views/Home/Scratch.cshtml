@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Scratch";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Scratch</h2>
+
+@section scripts
+{
+    <script src="~/Content/vendor/amcharts/amcharts.js"></script>
+    <script src="~/Content/vendor/amcharts/serial.js"></script>
+    <script src="~/Content/vendor/amcharts/themes/light.js"></script>
+    
+    <script>
+        d3.json(root + 'api/QueryBuilder/incumbent',function(r) {
+            console.log(r);
+        });
+    </script>
+}

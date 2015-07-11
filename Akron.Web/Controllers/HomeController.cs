@@ -30,5 +30,10 @@ namespace Akron.Web.Controllers
 
             return View();
         }
+
+        public ActionResult Scratch()
+        {
+            return View();
+        }
     }
 }

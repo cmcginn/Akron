@@ -70,6 +70,12 @@ namespace Akron.Web.Services
             return result;
         }
 
-      
+        public QueryBuilder GetQueryBuilder(string collectionName)
+        {
+            //var result = new QueryBuilder();
+            var service = new DataService();
+            var result = service.GetQueryBuilder(collectionName);
+            return result;
+        }
     }
 }

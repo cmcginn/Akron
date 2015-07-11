@@ -193,17 +193,26 @@
                 var gData = [];
                 var graphs = [];
                 var categories = [];
+                var reduced = [];
                 d3.json(root + 'api/Incumbent/', function(r) {
 
                     data = r;
-
+                    //ndx = crossfilter(data);
+                    //ndx.groupAll().reduce(function (p, v) {
+                    //    console.log()
+                    //    return p;
+                    //}, function(p, v) {
+                        
+                    //}, function() {
+                        
+                    //});
                     cData = d3.nest()
                         .key(function(d) { return d[0]._value[0]._value; })
                         .key(function(d) { return d[0]._value[1]._value; })
                         .rollup(function(d) {
                             return Math.floor(d[0][1]._value);
                         })
-                        .entries(data);
+                        .entries(r);
 
 
                     for (var i = 0; i < cData.length; i++) {
