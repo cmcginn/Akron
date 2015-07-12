@@ -64,22 +64,25 @@ namespace Akron.Data
                 var queryField = new QueryField();
 
                 queryField.Column = f;
-                queryField.AvailableValues.Add(new QueryFieldValue{ Key="All"});
-                FieldDefinition<BsonDocument, string> field = f.ColumnName;
-
-                var dd = Task<IAsyncCursor<string>>.Factory.StartNew(() =>
+                if (!f.FilterDependencyColumns.Any())
                 {
-                    var t = collectionItems.DistinctAsync<string>(field, new BsonDocument());
-                    t.GetAwaiter().OnCompleted(() =>
+                    queryField.AvailableValues.Add(new QueryFieldValue {Key = "All"});
+                    FieldDefinition<BsonDocument, string> field = f.ColumnName;
+
+                    var dd = Task<IAsyncCursor<string>>.Factory.StartNew(() =>
                     {
-                        t.Result.ForEachAsync((z) =>
+                        var t = collectionItems.DistinctAsync<string>(field, new BsonDocument());
+                        t.GetAwaiter().OnCompleted(() =>
                         {
-                            queryField.AvailableValues.Add(new QueryFieldValue{ Key=z, Value=z});
+                            t.Result.ForEachAsync((z) =>
+                            {
+                                queryField.AvailableValues.Add(new QueryFieldValue {Key = z, Value = z});
+                            });
                         });
+                        return t.Result;
                     });
-                    return t.Result;
-                });
-                tasks.Add(dd);
+                    tasks.Add(dd);
+                }
                 result.AvailableQueryFields.Add(queryField);
             });
           

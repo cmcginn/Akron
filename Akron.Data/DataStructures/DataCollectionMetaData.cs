@@ -12,11 +12,11 @@ namespace Akron.Data.DataStructures
         public string DataSourceName { get; set; }
         public string CollectionName { get; set; }
 
-        private List<DataColumnMetadata> _Filters;
+        private List<FilterDataColumnMetadata> _Filters;
 
-        public List<DataColumnMetadata> Filters
+        public List<FilterDataColumnMetadata> Filters
         {
-            get { return _Filters ?? (_Filters = new List<DataColumnMetadata>()); }
+            get { return _Filters ?? (_Filters = new List<FilterDataColumnMetadata>()); }
             set { _Filters = value; }
         }
 

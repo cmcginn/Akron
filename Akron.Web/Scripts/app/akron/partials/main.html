@@ -7,7 +7,7 @@
                     </div>
                     <div class="col-xs-6">
                         <!--<select class="form-control"  ng-model="selected" ng-options="item.key for item in availableField.availableValues"></select>-->
-                        <select class="form-control" ng-change="itemSelected(this.selected)" ng-model="availableField.selectedValue" ng-options="item.key for item in availableField.availableValues track by item.value"></select>
+                        <select class="form-control" ng-change="filterSelectionChange(availableField)" ng-model="availableField.selectedValue" ng-options="item.key for item in availableField.availableValues track by item.value"></select>
                     </div>
                 </div>
             </div>

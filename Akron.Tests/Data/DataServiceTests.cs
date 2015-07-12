@@ -94,19 +94,21 @@ namespace Akron.Tests.Data
             basePay.DataType = ColumnDataTypes.Double;
             basePay.DisplayName = "Base Pay";
 
-            var jobFamily = new DataColumnMetadata();
+            var jobFamily = new FilterDataColumnMetadata();
             jobFamily.ColumnIndex = 12;
             jobFamily.ColumnName = "Job_Family";
             jobFamily.DisplayName = "Job Family";
             basePay.DataType = ColumnDataTypes.String;
 
-            var jobTrack = new DataColumnMetadata();
+            var jobTrack = new FilterDataColumnMetadata();
             jobTrack.ColumnIndex = 14;
             jobTrack.ColumnName = "Job_Track";
             jobTrack.DisplayName = "Job Track";
+            jobTrack.FilterDependencyColumns.Add(jobFamily);
             basePay.DataType = ColumnDataTypes.String;
 
-            var jobLevel = new DataColumnMetadata();
+
+            var jobLevel = new FilterDataColumnMetadata();
             jobLevel.ColumnIndex = 16;
             jobLevel.ColumnName = "Job_Level";
             jobLevel.DisplayName = "Job Level";
