@@ -623,6 +623,7 @@
     <Content Include="Content\dist\js\sb-admin-2.js" />
     <Content Include="Content\js\flot-data.js" />
     <Content Include="Content\js\morris-data.js" />
+    <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="Content\vendor\amcharts\amcharts.js" />
     <Content Include="Content\vendor\amcharts\funnel.js" />
     <Content Include="Content\vendor\amcharts\gantt.js" />
@@ -838,10 +839,16 @@
     <Content Include="Scripts\angular-touch.min.js" />
     <Content Include="Scripts\angular-ui-router.js" />
     <Content Include="Scripts\angular-ui-router.min.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.min.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap.js" />
+    <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\app\akron\app.js" />
     <Content Include="Scripts\app\akron\controllers.js" />
+    <Content Include="Scripts\app\akron\directives.js" />
+    <Content Include="Scripts\app\akron\partials\test.html" />
     <Content Include="Scripts\app\akron\partials\main.html" />
     <Content Include="Scripts\app\akron\partials\main.queryBuilder.html" />
     <Content Include="Scripts\app\akron\services.js" />

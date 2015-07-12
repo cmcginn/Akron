@@ -177,7 +177,7 @@ namespace Akron.Tests.Data
                     {
                         t.Result.ForEachAsync((z) =>
                         {
-                            queryField.AvailableValues.Add(z);
+                            queryField.AvailableValues.Add(new QueryFieldValue { Key = z, Value = z });
                         });
                     });
                     return t.Result;

@@ -10,13 +10,15 @@ namespace Akron.Data.DataStructures
     {
         public DataColumnMetadata Column { get; set; }
 
-        public List<string> AvailableValues
+        public List<QueryFieldValue> AvailableValues
         {
-            get { return _AvailableValues ?? (_AvailableValues = new List<string>()); }
+            get { return _AvailableValues ?? (_AvailableValues = new List<QueryFieldValue>()); }
             set { _AvailableValues = value; }
         }
 
-        private List<string> _AvailableValues;
+        public QueryFieldValue SelectedValue { get; set; }
+
+        private List<QueryFieldValue> _AvailableValues;
 
     }
 }

@@ -1,2 +1,16 @@
-﻿<h1>Hello</h1>
-<div ui-view></div>
+﻿
+    <li ng-repeat="availableField in queryBuilder.availableQueryFields">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-xs-6">
+                        <span>{{availableField.column.displayName}}</span>
+                    </div>
+                    <div class="col-xs-6">
+                        <!--<select class="form-control"  ng-model="selected" ng-options="item.key for item in availableField.availableValues"></select>-->
+                        <select class="form-control" ng-change="itemSelected(this.selected)" ng-model="availableField.selectedValue" ng-options="item.key for item in availableField.availableValues track by item.value"></select>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+  

@@ -64,7 +64,7 @@ namespace Akron.Data
                 var queryField = new QueryField();
 
                 queryField.Column = f;
-
+                queryField.AvailableValues.Add(new QueryFieldValue{ Key="All"});
                 FieldDefinition<BsonDocument, string> field = f.ColumnName;
 
                 var dd = Task<IAsyncCursor<string>>.Factory.StartNew(() =>
@@ -74,7 +74,7 @@ namespace Akron.Data
                     {
                         t.Result.ForEachAsync((z) =>
                         {
-                            queryField.AvailableValues.Add(z);
+                            queryField.AvailableValues.Add(new QueryFieldValue{ Key=z, Value=z});
                         });
                     });
                     return t.Result;

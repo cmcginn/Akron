@@ -1,14 +1,14 @@
 ﻿angular.module('akron.controllers', [])
-    .controller('QueryBuilderController', [
-        '$scope', 'dataService', function ($scope, dataService) {
-        
+    .controller('MainController', [
+        '$scope', 'dataService', function($scope, dataService) {
+           
+
             var d = dataService.getQueryBuilderAsync('incumbent');
-        d.then(function(data) {
-            console.log(data);
-        }, function() {});
-    }
-    ]).controller('MainController', ['$scope','$state', function ($scope,$state) {
+            d.then(function (data) {
+                $scope.queryBuilder = data;
+                console.log(data);
+            }, function () { });
 
-        $state.transitionTo('main.queryBuilder');
-
-}]);
+        
+        }
+    ]);
