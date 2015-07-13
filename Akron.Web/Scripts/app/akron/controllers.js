@@ -12,11 +12,13 @@
                     });
                 });
 
-                _.forEach(cascades, function(cascade) {
+                _.forEach(cascades, function (cascade) {
+                    console.log(cascade);
                     var pData = { parentColumnName: selection.column.columnName, columnName: cascade.column.columnName, parentColumnValue: selection.selectedValue.value };
+
                     var ps = dataService.getAvaialableValuesAsync(pData);
                     ps.then(function(data) {
-                        console.log(data);
+                        cascade.availableValues = data;
                     });
                 });
 

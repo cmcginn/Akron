@@ -4,12 +4,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Akron.Data.DataStructures;
 using Akron.Web.Models;
+using Akron.Web.Services;
 
 namespace Akron.Web.ApiControllers
 {
     public class FilterDataColumnController : ApiController
     {
+        private AkronService svc = new AkronService();
         // GET: api/FilterDataColumn
         public IEnumerable<string> Get()
         {
@@ -23,9 +26,10 @@ namespace Akron.Web.ApiControllers
         }
 
         // POST: api/FilterDataColumn
-        public void Post(CascadeFilterModel value)
+        public List<QueryFieldValue> Post(CascadeFilterModel value)
         {
-            var x = value;
+            var result =  svc.GetFilteredQueryFieldValues(value);
+            return result;
         }
 
         // PUT: api/FilterDataColumn/5

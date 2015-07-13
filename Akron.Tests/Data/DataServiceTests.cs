@@ -203,6 +203,18 @@ namespace Akron.Tests.Data
         }
 
         [TestMethod]
+        public void CascadeFilterTest()
+        {
+            List<QueryFieldValue> result = null;
+            var target = GetTarget();
+            result = target.GetFilteredQueryFields("Job_Family", "Job_Track", "Building & Facilities Maintenance");
+           
+           
+    
+
+            Assert.IsTrue(result.Count > 0);
+        }
+        [TestMethod]
         public void BuildQuery()
         {
             BsonClassMap.RegisterClassMap<DataCollectionMetadata>(cm =>

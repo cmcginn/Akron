@@ -90,8 +90,32 @@ namespace Akron.Data
             return result;
 
         }
-        
 
+        public List<QueryFieldValue> GetFilteredQueryFields(string parentColumn, string dependentColumn, string parentValue)
+        {
+            var result = new List<QueryFieldValue>();
+
+            var client = new MongoClient("mongodb://localhost:27017");
+            var db = client.GetDatabase("hra");
+            var collectionItems = db.GetCollection<BsonDocument>("incumbent");
+            var tasks = new List<Task>();
+            var filter = Builders<BsonDocument>.Filter.Eq(parentColumn, parentValue);
+            FieldDefinition<BsonDocument, string> field = dependentColumn;
+            var t = collectionItems.DistinctAsync<string>(field, filter);
+            var z = Task.Factory.StartNew(() =>
+            {
+                var m = t.Result.ForEachAsync((s) =>
+                {
+                    result.Add(new QueryFieldValue { Key = s, Value = s });
+                });
+              
+            });
+            
+
+            tasks.Add(z);
+            Task.WaitAll(tasks.ToArray());
+            return result;
+        }
         public double Average()
         {
             var client = new MongoClient("mongodb://localhost:27017");

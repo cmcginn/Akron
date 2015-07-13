@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Akron.Data;
+using Akron.Data.DataStructures;
 using Akron.Web.Models;
 
 namespace Akron.Web.Services
@@ -75,6 +76,14 @@ namespace Akron.Web.Services
             //var result = new QueryBuilder();
             var service = new DataService();
             var result = service.GetQueryBuilder(collectionName);
+            return result;
+        }
+
+        public List<QueryFieldValue> GetFilteredQueryFieldValues(CascadeFilterModel model)
+        {
+            var service = new DataService();
+            var result = service.GetFilteredQueryFields(model.ParentColumnName, model.ColumnName,
+                model.ParentColumnValue);
             return result;
         }
     }
