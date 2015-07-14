@@ -23,6 +23,7 @@ namespace Akron.Data.Helpers
             result.Match = new MatchDefinition();
             //TODO rename to available filters
             result.Match.Filters = source.AvailableQueryFields.Where(x => x.SelectedValue != null).ToList();
+            result.Project = result.Group.ToProjectionDocument();
             return result;
         }
 
@@ -50,6 +51,46 @@ namespace Akron.Data.Helpers
         {
             var result = new BsonDocument();
             result.AddRange(source.ToGroup());
+            return result;
+        }
+
+        public static BsonDocument ToProjectionDocument(this GroupDefinition source)
+        {
+            var keyItems = new List<BsonElement>();
+            var valueItems = new List<BsonElement>();
+
+            var ignoreId = new BsonElement("_id", new BsonInt32(0));
+
+
+            for (var i = 0; i < source.Slicers.Count; i++)
+            {
+                var el = new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("$_id.s{0}", i)));
+                keyItems.Add(el);
+            }
+            for (var i = 0; i < source.Measures.Count; i++)
+            {
+                var el = new BsonElement(String.Format("f{0}", i), new BsonString(String.Format("$f{0}", i)));
+                valueItems.Add(el);
+            }
+
+            var keyValuesDoc = new BsonDocument();
+            keyValuesDoc.AddRange(keyItems);
+            var keyValuesElement = new BsonElement("key", keyValuesDoc);
+
+            var valueValuesDoc = new BsonDocument();
+            valueValuesDoc.AddRange(valueItems);
+
+            var valueValuesElement = new BsonElement("value", valueValuesDoc);
+
+            var ignoreIdDoc = new BsonDocument();
+            ignoreIdDoc.Add();
+
+            var projectDoc = new BsonDocument();
+            projectDoc.Add(new BsonElement("_id", new BsonInt32(0)));
+            projectDoc.Add(keyValuesElement);
+            projectDoc.Add(valueValuesElement);
+            var projectElement = new BsonElement("$project", projectDoc);
+            var result = new BsonDocument {projectElement};
             return result;
         }
         static IEnumerable<BsonElement> ToGroup(this GroupDefinition source)

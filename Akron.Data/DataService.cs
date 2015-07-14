@@ -45,10 +45,13 @@ namespace Akron.Data
 
             var m = query.Match.ToMatchDocument();
             var g  = query.Group.ToGroupDocument();
+            var p = query.Project;
+            
             var pipeline = new[]
                 {
                     m,
-                    g
+                    g,
+                    p
                 };
             var docs = items.AggregateAsync<BsonDocument>(pipeline).Result;
             var result = docs.ToListAsync<BsonDocument>().Result;

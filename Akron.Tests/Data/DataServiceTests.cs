@@ -390,9 +390,11 @@ namespace Akron.Tests.Data
             var groupDefinition = GetGroupDefinition();
             var md = matchDefinition.ToMatchDocument().ToString();
             var gd = groupDefinition.ToGroupDocument().ToString();
+            var pd = groupDefinition.ToProjectionDocument();
             Console.Out.Write(md);
             Console.Out.Write(gd);
-            var queryDoc = new QueryDocument { Group = groupDefinition, Match = matchDefinition, CollectionName = "incumbent", DataSourceLocation = "mongodb://localhost:27017", DataSource="hra" };
+            Console.Out.Write(pd);
+            var queryDoc = new QueryDocument { Project=pd, Group = groupDefinition, Match = matchDefinition, CollectionName = "incumbent", DataSourceLocation = "mongodb://localhost:27017", DataSource="hra" };
             var target = GetTarget();
             var actual = target.GetData(queryDoc);
             Assert.IsTrue(actual.Count > 0);
@@ -401,6 +403,56 @@ namespace Akron.Tests.Data
 
         }
 
+        [TestMethod]
+        public void BuildProjectTest()
+        {
+            var groupDefinition = GetGroupDefinition();
+            var keyItems = new List<BsonElement>();
+            var valueItems = new List<BsonElement>();
+
+            var ignoreId = new BsonElement("_id", new BsonInt32(0));
+          
+          
+            for (var i = 0; i < groupDefinition.Slicers.Count; i++)
+            {
+                var el = new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("$_id.s{0}", i)));
+                keyItems.Add(el);
+            }
+            for (var i = 0; i < groupDefinition.Measures.Count; i++)
+            {
+                var el = new BsonElement(String.Format("f{0}", i), new BsonString(String.Format("$f{0}", i)));
+                valueItems.Add(el);
+            }
+
+            var keyValuesDoc = new BsonDocument();
+            keyValuesDoc.AddRange(keyItems);
+            var keyValuesElement = new BsonElement("key", keyValuesDoc);
+
+            var valueValuesDoc = new BsonDocument();
+            valueValuesDoc.AddRange(valueItems);
+
+            var valueValuesElement = new BsonElement("value", valueValuesDoc);
+
+            var ignoreIdDoc = new BsonDocument();
+            ignoreIdDoc.Add();
+
+            var projectDoc = new BsonDocument();
+            projectDoc.Add(new BsonElement("_id", new BsonInt32(0)));
+            projectDoc.Add(keyValuesElement);
+            projectDoc.Add(valueValuesElement);
+            var projectElement = new BsonElement("$project", projectDoc);
+            var finalDoc = new BsonDocument();
+            finalDoc.Add(projectElement);
+            //var projectValuesDoc  = new BsonDocument();
+
+            //projectValuesDoc.AddRange(keyItems);
+
+            //var projectItemsElement = new BsonElement("$project", projectValuesDoc);
+            //var finalDoc = new BsonDocument();
+            //finalDoc.Add(projectItemsElement);
+            Console.Out.Write(finalDoc.ToString());
+
+        }
         [TestMethod]
         public void MatchDefTests()
         {
