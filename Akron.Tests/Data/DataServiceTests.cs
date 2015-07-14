@@ -343,8 +343,8 @@ namespace Akron.Tests.Data
             var result = new GroupDefinition();
             //possible slicers
             var jobFamily = new DataColumnMetadata {ColumnName = "Job_Family"};
-            var jobFamilyValue = new QueryFieldValue {Key = "Health Care"};
-            var jobTrack = new DataColumnMetadata {ColumnName = "Job_Track", };
+            var jobFamilyValue = new QueryFieldValue {Key = "Health Care", Value="Health Care"};
+            var jobTrack = new DataColumnMetadata {ColumnName = "Job_Track" };
             //slicer remains constant when selected
             var yearColumn = new DataColumnMetadata {ColumnName = "Year"};
             //measure 

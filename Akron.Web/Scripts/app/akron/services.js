@@ -29,7 +29,7 @@ angular.module('akron.services', []).
             },
             queryDataAsync:function(queryBuilder) {
                 return $q(function (resolve, reject) {
-                    $http.post('/api/Incumbent/', queryBuilder).
+                    $http.post('/api/QueryBuilder/', queryBuilder).
                     success(function (data, status, headers, config) {
                         resolve(data);
                     })

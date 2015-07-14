@@ -9,23 +9,30 @@ namespace Akron.Data
 {
     public class QueryBuilder
     {
-        //public string CollectionName { get; set; }
-        //public string DataSourceLocation { get; set; }
-        //public string DataSource { get; set; }
+     
 
-       // private List<QueryField> _Slicers;
+       private List<QueryField> _AvailableSlicers;
 
         private List<QueryField> _AvailableQueryFields;
 
-        //private List<FactDefinition> _Facts;
+        private List<MeasureDefinition> _AvailableMeasures;
 
-        //public GroupDefinition GroupDefinition { get; set; }
         public List<QueryField> AvailableQueryFields
         {
             get { return _AvailableQueryFields ?? (_AvailableQueryFields = new List<QueryField>()); }
             set { _AvailableQueryFields = value; }
         }
 
-      
+        public List<QueryField> AvailableSlicers
+        {
+            get { return _AvailableSlicers ?? (_AvailableSlicers = new List<QueryField>()); }
+            set { _AvailableSlicers = value; }
+        }
+
+        public List<MeasureDefinition> AvailableMeasures
+        {
+            get { return _AvailableMeasures ?? (_AvailableMeasures = new List<MeasureDefinition>()); }
+            set { _AvailableMeasures = value; }
+        }
     }
 }

@@ -6,7 +6,8 @@ using System.Web;
 using Akron.Data;
 using Akron.Data.DataStructures;
 using Akron.Web.Models;
-
+using MongoDB.Bson;
+using Akron.Data.Helpers;
 namespace Akron.Web.Services
 {
     public class AkronService
@@ -76,6 +77,14 @@ namespace Akron.Web.Services
             //var result = new QueryBuilder();
             var service = new DataService();
             var result = service.GetQueryBuilder(collectionName);
+            //TODO make Selectable
+            var jobFamily = new QueryField {Column = new DataColumnMetadata {ColumnName = "Job_Family"}, SelectedValue=new QueryFieldValue{ Key="Job_Family", Value="Job_Family"}};
+            var year = new QueryField {Column = new DataColumnMetadata {ColumnName = "Year"}, SelectedValue=new QueryFieldValue{ Key="Year", Value="Year"}};
+            var basePay = new QueryField { Column = new DataColumnMetadata { ColumnName = "Base_Pay" }, SelectedValue = new QueryFieldValue { Key = "Base_Pay", Value = "Base_Pay" } };
+            var basePayMeasure = new MeasureDefinition {QueryField = basePay, Operation = AggregateOperations.Average};
+            result.AvailableSlicers.Add(jobFamily);
+            result.AvailableSlicers.Add(year);
+            result.AvailableMeasures.Add(basePayMeasure);
             return result;
         }
 
@@ -85,6 +94,17 @@ namespace Akron.Web.Services
             var result = service.GetFilteredQueryFields(model.ParentColumnName, model.ColumnName,
                 model.ParentColumnValue);
             return result;
+        }
+
+        public List<BsonDocument> QueryData(QueryBuilder builder)
+        {
+           
+            var qd = builder.ToQueryDocument();
+            qd.CollectionName = "incumbent";
+            qd.DataSource = "hra";
+            qd.DataSourceLocation = "mongodb://localhost:27017";
+            var service = new DataService();
+            return service.GetData(qd);
         }
     }
 }

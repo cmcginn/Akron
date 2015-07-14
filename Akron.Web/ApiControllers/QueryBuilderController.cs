@@ -4,7 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Akron.Data;
 using Akron.Web.Services;
+using MongoDB.Bson;
 
 namespace Akron.Web.ApiControllers
 {
@@ -24,8 +26,10 @@ namespace Akron.Web.ApiControllers
         }
 
         // POST: api/QueryBuilder
-        public void Post([FromBody]string value)
+        public List<BsonDocument> Post(QueryBuilder value)
         {
+            var result = svc.QueryData(value);
+            return result;
         }
 
         // PUT: api/QueryBuilder/5

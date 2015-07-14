@@ -30,6 +30,12 @@ namespace Akron.Data
             return items.Find(new BsonDocument()).ToListAsync().Result;
         }
 
+        //public List<BsonDocument> QueryData(QueryBuilder query)
+        //{
+        //    var doc = query.ToQueryDocument();
+        //    return GetData(doc);
+        //}
+
         public List<BsonDocument> GetData(QueryDocument query)
         {
             var client = new MongoClient(query.DataSourceLocation);

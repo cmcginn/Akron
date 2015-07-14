@@ -11,28 +11,20 @@ namespace Akron.Data.Helpers
 {
     public static class QueryBuilderExtensions
     {
-        //public static QueryDefinition ToQueryDefinition(this QueryDocument source)
-        //{
-        //    var result = new QueryDefinition();
-        //    var matchBson = source.Match.ToMatchDocument();
-        //    var groupBson = source.Group.ToGroupDocument();
-            
-        //}
-        //public static QueryDefinition ToQueryDefinition(this QueryDocument source)
-        //{
-        //    var result = new QueryDefinition();
-        //    result.Group = source.GroupDefinition;
-        //    var matchDefinition = new MatchDefinition();
-        //    source.AvailableQueryFields.Where(x => x.SelectedValue != null).ToList().ForEach(x =>
-        //    {
-        //        matchDefinition.Filters.Add(x);
-        //    });
-        //    result.MatchDefinition = matchDefinition;
-        //    result.CollectionName = source.CollectionName;
-        //    result.DataSource = source.DataSource;
-        //    result.DataSourceLocation = source.DataSourceLocation;
-        //    return result;
-        //}
+
+        public static QueryDocument ToQueryDocument(this QueryBuilder source)
+        {
+            var result = new QueryDocument();
+            result.Group = new GroupDefinition();
+            result.Group.Measures = source.AvailableMeasures.Where(x => x.QueryField.SelectedValue != null).ToList();
+            //TODO refactor this, these do not have selected values
+            result.Group.Slicers = source.AvailableSlicers.Where(x => x.SelectedValue != null).ToList();
+
+            result.Match = new MatchDefinition();
+            //TODO rename to available filters
+            result.Match.Filters = source.AvailableQueryFields.Where(x => x.SelectedValue != null).ToList();
+            return result;
+        }
 
         public static BsonDocument ToMatchDocument(this MatchDefinition source)
         {
@@ -77,6 +69,7 @@ namespace Akron.Data.Helpers
 
 
             var slicers = new List<BsonElement>();
+          
             for (var i = 0; i < source.Slicers.Count; i++)
             {
                 slicers.Add(new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("${0}", source.Slicers.ElementAt(i).Column.ColumnName))));
