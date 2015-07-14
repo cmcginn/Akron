@@ -32,6 +32,14 @@
                 
             }, function () { });
 
+            
+            $scope.getData = function () {
+                console.log('WHWHWHW');
+                var getData = dataService.queryDataAsync($scope.queryBuilder);
+                getData.then(function(data) {
+                    console.log(data);
+                }, function() {});
+            }
         
         }
     ]);

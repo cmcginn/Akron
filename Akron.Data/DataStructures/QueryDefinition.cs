@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Akron.Data.DataStructures
 {
     public class QueryDefinition
     {
-       // List<>
+        public IAggregateFluent<BsonDocument> Definition { get; set; }
     }
 }

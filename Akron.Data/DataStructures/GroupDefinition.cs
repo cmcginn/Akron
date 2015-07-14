@@ -9,18 +9,18 @@ namespace Akron.Data.DataStructures
     public class GroupDefinition
     {
         //Becomes grouping, used for XAxis
-        List<string> _Slicers;
-        public List<string> Slicers
+        List<QueryField> _Slicers;
+        public List<QueryField> Slicers
         {
-            get { return _Slicers ?? (_Slicers = new List<string>()); }
+            get { return _Slicers ?? (_Slicers = new List<QueryField>()); }
             set { _Slicers = value; }
         }
         //Becomes Y Axis Values
-        List<FactDefinition> _Facts;
-        public List<FactDefinition> Facts
+        List<MeasureDefinition> _Measures;
+        public List<MeasureDefinition> Measures
         {
-            get { return _Facts ?? (_Facts = new List<FactDefinition>()); }
-            set { _Facts = value; }
+            get { return _Measures ?? (_Measures = new List<MeasureDefinition>()); }
+            set { _Measures = value; }
         }
     }
 }

@@ -57,15 +57,16 @@
     <Compile Include="DataStructures\AggregateOperations.cs" />
     <Compile Include="DataStructures\DataCollectionMetadata.cs" />
     <Compile Include="DataStructures\ColumnDataTypes.cs" />
-    <Compile Include="DataStructures\FactDefinition.cs" />
+    <Compile Include="DataStructures\MeasureDefinition.cs" />
     <Compile Include="DataStructures\FilterDataColumnMetadata.cs" />
     <Compile Include="DataStructures\GroupDefinition.cs" />
     <Compile Include="DataStructures\DataColumnMetadata.cs" />
+    <Compile Include="DataStructures\MatchDefinition.cs" />
     <Compile Include="DataStructures\QueryDefinition.cs" />
     <Compile Include="DataStructures\QueryDocument.cs" />
     <Compile Include="DataStructures\QueryField.cs" />
     <Compile Include="DataStructures\QueryFieldValue.cs" />
-    <Compile Include="Helpers\QueryBuilder.cs" />
+    <Compile Include="Helpers\QueryBuilderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilder.cs" />
   </ItemGroup>

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Akron.Data.DataStructures
 {
-    public class FactDefinition
+    public class MeasureDefinition
     {
         public AggregateOperations Operation { get; set; }
-        public string Name { get; set; }
+        public QueryField QueryField { get; set; }
     }
 }

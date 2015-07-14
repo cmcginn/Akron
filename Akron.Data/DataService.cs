@@ -32,13 +32,16 @@ namespace Akron.Data
 
         public List<BsonDocument> GetData(QueryDocument query)
         {
-            var client = new MongoClient("mongodb://localhost:27017");
-            var db = client.GetDatabase("hra");
+            var client = new MongoClient(query.DataSourceLocation);
+            var db = client.GetDatabase(query.DataSource);
             var items = db.GetCollection<BsonDocument>(query.CollectionName);
 
-            var g  = query.Group.ToGroup();
+
+            var m = query.Match.ToMatchDocument();
+            var g  = query.Group.ToGroupDocument();
             var pipeline = new[]
                 {
+                    m,
                     g
                 };
             var docs = items.AggregateAsync<BsonDocument>(pipeline).Result;

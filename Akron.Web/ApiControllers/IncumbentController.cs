@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Akron.Data;
 using Akron.Data.DataStructures;
 using Akron.Web.Services;
 using MongoDB.Bson;
@@ -16,16 +17,17 @@ namespace Akron.Web.ApiControllers
         // GET: api/Incumbent
         public IEnumerable<BsonDocument> Get()
         {
-            var svc = new Akron.Data.DataService();
-            var queryDoc = new QueryDocument();
-            var queryGroup = new GroupDefinition();
-            queryGroup.Slicers.Add("Year");
-            queryGroup.Slicers.Add("org_type");
-            queryGroup.Facts.Add(new FactDefinition {Name = "Base_Pay", Operation = AggregateOperations.Average});
-            queryDoc.CollectionName = "incumbent";
-            queryDoc.Group = queryGroup;
-            var result = svc.GetData(queryDoc);
-            return result;
+            throw new System.NotImplementedException();
+            //var svc = new Akron.Data.DataService();
+            //var queryDoc = new QueryDocument();
+            //var queryGroup = new GroupDefinition();
+            //queryGroup.Slicers.Add("Year");
+            //queryGroup.Slicers.Add("org_type");
+            //queryGroup.Measures.Add(new FactDefinition {Name = "Base_Pay", Operation = AggregateOperations.Average});
+            //queryDoc.CollectionName = "incumbent";
+            //queryDoc.Group = queryGroup;
+            //var result = svc.GetData(queryDoc);
+            //return result;
         }
 
         // GET: api/Incumbent/5
@@ -35,8 +37,10 @@ namespace Akron.Web.ApiControllers
         }
 
         // POST: api/Incumbent
-        public void Post([FromBody]string value)
+        public void Post(QueryBuilder value)
         {
+            var m = value;
+            var x = "Y";
         }
 
         // PUT: api/Incumbent/5
