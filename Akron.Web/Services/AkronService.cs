@@ -78,21 +78,23 @@ namespace Akron.Web.Services
             var service = new DataService();
             var result = service.GetQueryBuilder(collectionName);
             //TODO make Selectable
-            var year = new QueryField { Column = new DataColumnMetadata { ColumnName = "Year" }, SelectedValue = new QueryFieldValue { Key = "Year", Value = "Year" } };
-            var jobFamily = new QueryField {Column = new DataColumnMetadata {ColumnName = "Job_Family"}, SelectedValue=new QueryFieldValue{ Key="Job_Family", Value="Job_Family"}};
+           // var year = new DimensionDefinition { Column = new DataColumnMetadata { ColumnName = "Year" }, IsDefault=true};
+            //var jobFamily = new DimensionDefinition {Column = new DataColumnMetadata {ColumnName = "Job_Family"}};
             
-            var basePay = new QueryField { Column = new DataColumnMetadata { ColumnName = "Base_Pay" }, SelectedValue = new QueryFieldValue { Key = "Base_Pay", Value = "Base_Pay" } };
-            var basePayMeasure = new MeasureDefinition {QueryField = basePay, Operation = AggregateOperations.Average};
+            //var basePay = new QueryField { Column = new DataColumnMetadata { ColumnName = "Base_Pay" }, SelectedValue = new FilterValue { Key = "Base_Pay", Value = "Base_Pay" } };
+            //var basePayMeasure = new MeasureDefinition { Column = new DataColumnMetadata { ColumnName = "Base_Pay" }, IsDefault=true, Operation = AggregateOperations.Average };
            //default x
-            result.AvailableSlicers.Add(year);
-            result.AvailableSlicers.Add(jobFamily);
+            //result.AvailableSlicers.Add(year);
+            //result.AvailableSlicers.Add(jobFamily);
             
-            result.AvailableMeasures.Add(basePayMeasure);
+            //result.AvailableMeasures.Add(basePayMeasure);
             return result;
         }
 
         public List<SeriesXY> GetSeries(QueryBuilder builder)
         {
+            builder.SelectedSlicers.Insert(0, builder.AvailableSlicers.Single(x => x.IsDefault));
+            builder.SelectedMeasures = new List<MeasureDefinition> {builder.AvailableMeasures.Single(x => x.IsDefault)};
             var qd = builder.ToSeriesQueryDocument();
             qd.CollectionName = "incumbent";
             qd.DataSource = "hra";
@@ -116,7 +118,7 @@ namespace Akron.Web.Services
             });
             return result;
         }
-        public List<QueryFieldValue> GetFilteredQueryFieldValues(CascadeFilterModel model)
+        public List<FilterValue> GetFilteredQueryFieldValues(CascadeFilterModel model)
         {
             var service = new DataService();
             var result = service.GetFilteredQueryFields(model.ParentColumnName, model.ColumnName,

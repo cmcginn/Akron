@@ -63,12 +63,12 @@ namespace Akron.Data
             var tasks = new List<Task<IAsyncCursor<string>>>();
             metadata.Filters.ForEach(f =>
             {
-                var queryField = new QueryField();
+                var filterDefinition = new FilterDefinition();
 
-                queryField.Column = f;
+                filterDefinition.Column = f;
                 if (!f.FilterDependencyColumns.Any())
                 {
-                    queryField.AvailableValues.Add(new QueryFieldValue {Key = "All"});
+                    filterDefinition.AvailableFilterValues.Add(new FilterValue {Key = "All"});
                     FieldDefinition<BsonDocument, string> field = f.ColumnName;
 
                     var dd = Task<IAsyncCursor<string>>.Factory.StartNew(() =>
@@ -78,24 +78,28 @@ namespace Akron.Data
                         {
                             t.Result.ForEachAsync((z) =>
                             {
-                                queryField.AvailableValues.Add(new QueryFieldValue {Key = z, Value = z});
+                                filterDefinition.AvailableFilterValues.Add(new FilterValue { Key = z, Value = z });
                             });
                         });
                         return t.Result;
                     });
                     tasks.Add(dd);
                 }
-                result.AvailableQueryFields.Add(queryField);
+                result.AvailableFilters.Add(filterDefinition);
             });
-          
+            result.AvailableSlicers = metadata.Dimensions.Select(x => new DimensionDefinition {Column = x, IsDefault = x.IsDefault}).ToList();
+            //refactor available operations
+            result.AvailableMeasures =
+                metadata.Measures.Select(
+                    x => new MeasureDefinition {Column = x, Operation = AggregateOperations.Average, IsDefault=x.IsDefault}).ToList();
             Task.WaitAll(tasks.ToArray());
             return result;
 
         }
 
-        public List<QueryFieldValue> GetFilteredQueryFields(string parentColumn, string dependentColumn, string parentValue)
+        public List<FilterValue> GetFilteredQueryFields(string parentColumn, string dependentColumn, string parentValue)
         {
-            var result = new List<QueryFieldValue>();
+            var result = new List<FilterValue>();
 
             var client = new MongoClient("mongodb://localhost:27017");
             var db = client.GetDatabase("hra");
@@ -108,7 +112,7 @@ namespace Akron.Data
             {
                 var m = t.Result.ForEachAsync((s) =>
                 {
-                    result.Add(new QueryFieldValue { Key = s, Value = s });
+                    result.Add(new FilterValue { Key = s, Value = s });
                 });
               
             });

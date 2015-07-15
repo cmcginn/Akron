@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Akron.Data.DataStructures
 {
-    public class MeasureDefinition
+    public class DimensionColumnMetadata:DataColumnMetadata
     {
-        public AggregateOperations Operation { get; set; }
-        public DataColumnMetadata Column { get; set; }
-
         public bool IsDefault { get; set; }
     }
 }

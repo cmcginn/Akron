@@ -20,19 +20,19 @@ namespace Akron.Data.DataStructures
             set { _Filters = value; }
         }
 
-        private List<DataColumnMetadata> _Measures;
+        private List<MeasureDataColumnMetadata> _Measures;
 
-        public List<DataColumnMetadata> Measures
+        public List<MeasureDataColumnMetadata> Measures
         {
-            get { return _Measures ?? (_Measures = new List<DataColumnMetadata>()); }
+            get { return _Measures ?? (_Measures = new List<MeasureDataColumnMetadata>()); }
             set { _Measures = value; }
         }
 
-        private List<DataColumnMetadata> _Dimensions;
+        private List<DimensionColumnMetadata> _Dimensions;
 
-        public List<DataColumnMetadata> Dimensions
+        public List<DimensionColumnMetadata> Dimensions
         {
-            get { return _Dimensions ?? (_Dimensions = new List<DataColumnMetadata>()); }
+            get { return _Dimensions ?? (_Dimensions = new List<DimensionColumnMetadata>()); }
             set { _Dimensions = value; }
         }
 

@@ -8,11 +8,11 @@ namespace Akron.Data.DataStructures
 {
     public class MatchDefinition
     {
-        private List<QueryField> _Filters;
+        private List<FilterDefinition> _Filters;
 
-        public List<QueryField> Filters
+        public List<FilterDefinition> Filters
         {
-            get { return _Filters ?? (_Filters = new List<QueryField>()); }
+            get { return _Filters ?? (_Filters = new List<FilterDefinition>()); }
             set { _Filters = value; }
         }
     }

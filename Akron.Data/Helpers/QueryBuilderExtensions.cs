@@ -22,10 +22,12 @@ namespace Akron.Data.Helpers
         {
             var result = new QueryDocument();
             var match = new MatchDefinition();
-            match.Filters = source.AvailableQueryFields.Where(x => x.SelectedValue != null).ToList();
+           
+            match.Filters = source.SelectedFilters;
             var group = new GroupDefinition();
-            group.Measures = source.AvailableMeasures.Where(x => x.QueryField.SelectedValue != null).ToList();
-            group.Slicers = source.AvailableSlicers.Where(x => x.SelectedValue != null).ToList();
+            group.Measures = source.SelectedMeasures;
+            
+            group.Dimensions = source.SelectedSlicers;
             var project = group.ToProjectionDocument();
 
             result.Pipeline.Add(match.ToMatchDocument());
@@ -70,7 +72,7 @@ namespace Akron.Data.Helpers
             source.Filters.ForEach(f =>
             {
                 var colDoc = new BsonDocument();
-                var itemElm = new BsonElement("$eq", new BsonString(f.SelectedValue.Value));
+                var itemElm = new BsonElement("$eq", new BsonString(f.FilterValue.Value));
                 colDoc.Add(itemElm);
                 var colElm = new BsonElement(f.Column.ColumnName, colDoc);
                 matchFilterElements.Add(colElm);
@@ -98,7 +100,7 @@ namespace Akron.Data.Helpers
             var ignoreId = new BsonElement("_id", new BsonInt32(0));
 
 
-            for (var i = 0; i < source.Slicers.Count; i++)
+            for (var i = 0; i < source.Dimensions.Count; i++)
             {
                 var el = new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("$_id.s{0}", i)));
                 keyItems.Add(el);
@@ -147,9 +149,9 @@ namespace Akron.Data.Helpers
 
             var slicers = new List<BsonElement>();
           
-            for (var i = 0; i < source.Slicers.Count; i++)
+            for (var i = 0; i < source.Dimensions.Count; i++)
             {
-                slicers.Add(new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("${0}", source.Slicers.ElementAt(i).Column.ColumnName))));
+                slicers.Add(new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("${0}", source.Dimensions.ElementAt(i).Column.ColumnName))));
             }
             var idDoc = new BsonDocument(slicers);
             var idElm = new BsonElement("_id", idDoc);
@@ -174,7 +176,7 @@ namespace Akron.Data.Helpers
                         op = "$sum";
                         break;
                 }
-                var el = new BsonElement(op, new BsonString(String.Format("${0}", fact.QueryField.Column.ColumnName)));
+                var el = new BsonElement(op, new BsonString(String.Format("${0}", fact.Column.ColumnName)));
                 var factDoc = new BsonDocument();
                 factDoc.Add(el);
                 var factElementDoc = new BsonDocument();

@@ -21,8 +21,8 @@ namespace Akron.Web.ApiControllers
             //var svc = new Akron.Data.DataService();
             //var queryDoc = new QueryDocument();
             //var queryGroup = new GroupDefinition();
-            //queryGroup.Slicers.Add("Year");
-            //queryGroup.Slicers.Add("org_type");
+            //queryGroup.Dimensions.Add("Year");
+            //queryGroup.Dimensions.Add("org_type");
             //queryGroup.Measures.Add(new FactDefinition {Name = "Base_Pay", Operation = AggregateOperations.Average});
             //queryDoc.CollectionName = "incumbent";
             //queryDoc.Group = queryGroup;

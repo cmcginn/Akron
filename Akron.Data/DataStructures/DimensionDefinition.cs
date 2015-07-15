@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Akron.Data.DataStructures
 {
-    public class QueryFieldValue
+    public class DimensionDefinition
     {
-        public string Key { get; set; }
-        public string Value { get; set; }
+        public DataColumnMetadata Column { get; set; }
 
+        public bool IsDefault { get; set; }
     }
 }

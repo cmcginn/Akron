@@ -1,5 +1,18 @@
 ﻿
-    <li ng-repeat="availableField in queryBuilder.availableQueryFields">
+    <div class="row">
+        <div class="col-xs-3" ng-repeat="availableSlicer in queryBuilder.availableSlicers">
+            <div class="radio" ng-if="!availableSlicer.isDefault">
+                <label>
+                    <input type="radio" name="optionsRadios" ng-click="dimensionSelected(availableSlicer)" value="{{availableSlicer.column.columnName}}">
+                    {{availableSlicer.column.displayName}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+<hr />
+    <li ng-repeat="availableField in queryBuilder.availableFilters">
         <div class="row">
             <div class="col-xs-12">
                 <div class="col-xs-6">
@@ -7,7 +20,7 @@
                 </div>
                 <div class="col-xs-6">
                     <!--<select class="form-control"  ng-model="selected" ng-options="item.key for item in availableField.availableValues"></select>-->
-                    <select class="form-control" ng-change="filterSelectionChange(availableField)" ng-model="availableField.selectedValue" ng-options="item.key for item in availableField.availableValues track by item.value"></select>
+                    <select class="form-control" ng-change="filterSelectionChange(availableField)" ng-model="availableField.filterValue" ng-options="item.key for item in availableField.availableFilterValues track by item.value"></select>
                 </div>
             </div>
         </div>

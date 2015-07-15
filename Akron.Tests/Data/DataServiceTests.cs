@@ -42,8 +42,8 @@ namespace Akron.Tests.Data
             //var target = GetTarget();
             //var queryDoc = new QueryDocument();
             //var queryGroup = new GroupDefinition();
-            //queryGroup.Slicers.Add("Year");
-            //queryGroup.Slicers.Add("org_type");
+            //queryGroup.Dimensions.Add("Year");
+            //queryGroup.Dimensions.Add("org_type");
             //queryGroup.Measures.Add(new FactDefinition {Name = "Base_Pay", Operation = AggregateOperations.Average});
             //queryDoc.CollectionName = "incumbent";
             //queryDoc.Group = queryGroup;
@@ -77,24 +77,53 @@ namespace Akron.Tests.Data
             s.CollectionName = "incumbent";
             s.DataSourceName = "hra";
             s.DisplayName = "Incumbent";
+            //Dimensions are slicers
+            var yearColumnDimension = new DimensionColumnMetadata();
+            yearColumnDimension.ColumnIndex = 22;
+            yearColumnDimension.ColumnName = "Year";
+            yearColumnDimension.DataType = ColumnDataTypes.Int32;
+            yearColumnDimension.DisplayName = "Year";
+            yearColumnDimension.IsDefault = true;
+
+            var jobFamilyDimension = new DimensionColumnMetadata();
+            jobFamilyDimension.ColumnIndex = 12;
+            jobFamilyDimension.ColumnName = "Job_Family";
+            jobFamilyDimension.DisplayName = "Job Family";
+            jobFamilyDimension.DataType = ColumnDataTypes.String;
+
+            var jobTrackDimension = new DimensionColumnMetadata();
+            jobTrackDimension.ColumnIndex = 14;
+            jobTrackDimension.ColumnName = "Job_Track";
+            jobTrackDimension.DisplayName = "Job Track";
+            jobTrackDimension.DataType = ColumnDataTypes.String;
+
+
+            var jobLevelDimension = new DimensionColumnMetadata();
+            jobLevelDimension.ColumnIndex = 16;
+            jobLevelDimension.ColumnName = "Job_Level";
+            jobLevelDimension.DisplayName = "Job Level";
+            jobLevelDimension.DataType = ColumnDataTypes.String;
+
+            
+            var orgType = new DimensionColumnMetadata();
+            orgType.ColumnIndex = 7;
+            orgType.ColumnName = "org_type";
+            orgType.DataType = ColumnDataTypes.String;
+            orgType.DisplayName = "Organization Type";
+
+            var basePay = new MeasureDataColumnMetadata();
+            basePay.ColumnIndex = 23;
+            basePay.ColumnName = "Base_Pay";
+            basePay.DataType = ColumnDataTypes.Double;
+            basePay.DisplayName = "Base Pay";
+            basePay.IsDefault = true;
 
             var yearColumn = new DataColumnMetadata();
             yearColumn.ColumnIndex = 22;
             yearColumn.ColumnName = "Year";
             yearColumn.DataType = ColumnDataTypes.Int32;
             yearColumn.DisplayName = "Year";
-
-            var orgType = new DataColumnMetadata();
-            orgType.ColumnIndex = 7;
-            orgType.ColumnName = "org_type";
-            orgType.DataType = ColumnDataTypes.String;
-            orgType.DisplayName = "Organization Type";
-
-            var basePay = new DataColumnMetadata();
-            basePay.ColumnIndex = 23;
-            basePay.ColumnName = "Base_Pay";
-            basePay.DataType = ColumnDataTypes.Double;
-            basePay.DisplayName = "Base Pay";
+    
 
             var jobFamily = new FilterDataColumnMetadata();
             jobFamily.ColumnIndex = 12;
@@ -123,10 +152,10 @@ namespace Akron.Tests.Data
             s.Columns.Add(jobTrack);
             s.Columns.Add(jobLevel);
 
-            s.Dimensions.Add(yearColumn);
-            s.Dimensions.Add(jobFamily);
-            s.Dimensions.Add(jobTrack);
-            s.Dimensions.Add(jobLevel);
+            s.Dimensions.Add(yearColumnDimension);
+            s.Dimensions.Add(jobFamilyDimension);
+            s.Dimensions.Add(jobTrackDimension);
+            s.Dimensions.Add(jobLevelDimension);
 
 
             s.Measures.Add(basePay);
@@ -169,9 +198,9 @@ namespace Akron.Tests.Data
             var tasks = new List<Task<IAsyncCursor<string>>>();
             metaData.Filters.ForEach(f =>
             {
-                var queryField = new QueryField();
+                var filterDefinition = new FilterDefinition();
 
-                queryField.Column = f;
+                filterDefinition.Column = f;
 
                 FieldDefinition<BsonDocument, string> field = f.ColumnName;
                 var dd = Task<IAsyncCursor<string>>.Factory.StartNew(() =>
@@ -181,40 +210,32 @@ namespace Akron.Tests.Data
                     {
                         t.Result.ForEachAsync((z) =>
                         {
-                            queryField.AvailableValues.Add(new QueryFieldValue {Key = z, Value = z});
+                            filterDefinition.AvailableFilterValues.Add(new FilterValue {Key = z, Value = z});
                         });
                     });
                     return t.Result;
                 });
-                //var dd = collectionItems.DistinctAsync<string>(field, new BsonDocument());
-                //dd.GetAwaiter().OnCompleted(() =>
-                //{
-                //    //dd.Result.ForEachAsync<string>(x => (queryField.AvailableValues.Add(x)));
-                //    dd.Result.ForEachAsync((z) =>
-                //    {
-                //        queryField.AvailableValues.Add(z);
-                //    });
-                //});
 
                 tasks.Add(dd);
-                queryBuilder.AvailableQueryFields.Add(queryField);
+                queryBuilder.AvailableFilters.Add(filterDefinition);
             });
 
             Task.WaitAll(tasks.ToArray());
-            Assert.IsFalse(queryBuilder.AvailableQueryFields.Any(x => x.AvailableValues.Count == 0));
+            Assert.IsFalse(queryBuilder.AvailableFilters.Any(x => x.FilterValue!=null));
 
             var gd = new GroupDefinition();
      
-            gd.Slicers.Add(new QueryField
+            gd.Dimensions.Add(new DimensionDefinition
             {
-                Column = new DataColumnMetadata { ColumnName = "Year", DataType = ColumnDataTypes.Int32 }
+                Column = new DataColumnMetadata { ColumnName = "Year", DataType = ColumnDataTypes.Int32 },
+                IsDefault=true
             });
 
             var fd = new MeasureDefinition();
-            fd.QueryField = new QueryField
-            {
-                Column = new DataColumnMetadata { ColumnName = "Base_Pay", DataType = ColumnDataTypes.Double }
-            };
+            fd.Column = new DataColumnMetadata {ColumnName = "Base_Pay", DataType = ColumnDataTypes.Double};
+            fd.IsDefault = true;
+                
+          
             gd.Measures.Add(fd);
             return queryBuilder;
         }
@@ -231,7 +252,7 @@ namespace Akron.Tests.Data
         [TestMethod]
         public void CascadeFilterTest()
         {
-            List<QueryFieldValue> result = null;
+            List<FilterValue> result = null;
             var target = GetTarget();
             result = target.GetFilteredQueryFields("Job_Family", "Job_Track", "Building & Facilities Maintenance");
 
@@ -245,13 +266,13 @@ namespace Akron.Tests.Data
         public void BuildQuery()
         {
             var source = GetQueryBuilder();
-            var jobFamily = source.AvailableQueryFields.Single(x => x.Column.ColumnName == "Job_Family");
-            var jobTrack = source.AvailableQueryFields.Single(x => x.Column.ColumnName == "Job_Track");
+            var jobFamily = source.AvailableFilters.Single(x => x.Column.ColumnName == "Job_Family");
+            var jobTrack = source.AvailableFilters.Single(x => x.Column.ColumnName == "Job_Track");
 
             var matchBuilder = new FilterDefinitionBuilder<BsonDocument>();
-            jobFamily.SelectedValue = new QueryFieldValue {Key = "Executive", Value = "Executive"};
+            jobFamily.FilterValue = new FilterValue {Key = "Executive", Value = "Executive"};
             var jobFamilyFilter = matchBuilder.All(jobFamily.Column.ColumnName,
-                new List<String> {jobFamily.SelectedValue.Value});
+                new List<String> {jobFamily.FilterValue.Value});
             //take care of grouping key
             var groupDoc = new BsonDocument();
             var slicers = new List<BsonElement>();
@@ -343,21 +364,23 @@ namespace Akron.Tests.Data
             var result = new GroupDefinition();
             //possible slicers
             var jobFamily = new DataColumnMetadata {ColumnName = "Job_Family"};
-            var jobFamilyValue = new QueryFieldValue {Key = "Health Care", Value="Health Care"};
+            var jobFamilyValue = new FilterValue {Key = "Health Care", Value="Health Care"};
             var jobTrack = new DataColumnMetadata {ColumnName = "Job_Track" };
             //slicer remains constant when selected
             var yearColumn = new DataColumnMetadata {ColumnName = "Year"};
+            
             //measure 
 
             var basePayColumn = new DataColumnMetadata {ColumnName = "Base_Pay"};
             var basePayMeasure = new MeasureDefinition
             {
                 Operation = AggregateOperations.Average,
-                QueryField = new QueryField {Column = basePayColumn}
+                Column = basePayColumn,
+                IsDefault=true
             };
             //TODO no Selected Value thats a filter
-            result.Slicers.Add(new QueryField { Column = yearColumn });
-            result.Slicers.Add(new QueryField
+            result.Dimensions.Add(new DimensionDefinition { Column = yearColumn, IsDefault=true });
+            result.Dimensions.Add(new DimensionDefinition
             {
                 Column = jobFamily
             });
@@ -370,10 +393,10 @@ namespace Akron.Tests.Data
 
         MatchDefinition GetMatchDefinition()
         {
-            var mf = new QueryField
+            var mf = new FilterDefinition
             {
                 Column = new DataColumnMetadata { ColumnName = "Job_Family", DataType = ColumnDataTypes.String },
-                SelectedValue = new QueryFieldValue { Key = "Health Care", Value = "Health Care" }
+                FilterValue = new FilterValue { Key = "Health Care", Value = "Health Care" }
             };
 
             var matchDefinition = new MatchDefinition();
@@ -453,7 +476,7 @@ namespace Akron.Tests.Data
             var ignoreId = new BsonElement("_id", new BsonInt32(0));
           
           
-            for (var i = 0; i < groupDefinition.Slicers.Count; i++)
+            for (var i = 0; i < groupDefinition.Dimensions.Count; i++)
             {
                 var el = new BsonElement(String.Format("s{0}", i), new BsonString(String.Format("$_id.s{0}", i)));
                 keyItems.Add(el);

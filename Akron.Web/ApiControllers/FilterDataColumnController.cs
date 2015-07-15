@@ -26,7 +26,7 @@ namespace Akron.Web.ApiControllers
         }
 
         // POST: api/FilterDataColumn
-        public List<QueryFieldValue> Post(CascadeFilterModel value)
+        public List<FilterValue> Post(CascadeFilterModel value)
         {
             var result =  svc.GetFilteredQueryFieldValues(value);
             return result;
