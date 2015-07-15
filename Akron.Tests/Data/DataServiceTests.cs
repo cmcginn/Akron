@@ -356,11 +356,12 @@ namespace Akron.Tests.Data
                 QueryField = new QueryField {Column = basePayColumn}
             };
             //TODO no Selected Value thats a filter
+            result.Slicers.Add(new QueryField { Column = yearColumn });
             result.Slicers.Add(new QueryField
             {
                 Column = jobFamily
             });
-            result.Slicers.Add(new QueryField {Column = yearColumn});
+            
             result.Measures.Add(basePayMeasure);
 
             return result;
@@ -388,16 +389,55 @@ namespace Akron.Tests.Data
             
             var matchDefinition = GetMatchDefinition();
             var groupDefinition = GetGroupDefinition();
-            var md = matchDefinition.ToMatchDocument().ToString();
-            var gd = groupDefinition.ToGroupDocument().ToString();
+            matchDefinition.Filters.Clear();
+            var md = matchDefinition.ToMatchDocument();
+            var gd = groupDefinition.ToGroupDocument();
             var pd = groupDefinition.ToProjectionDocument();
-            Console.Out.Write(md);
-            Console.Out.Write(gd);
-            Console.Out.Write(pd);
-            var queryDoc = new QueryDocument { Project=pd, Group = groupDefinition, Match = matchDefinition, CollectionName = "incumbent", DataSourceLocation = "mongodb://localhost:27017", DataSource="hra" };
-            var target = GetTarget();
-            var actual = target.GetData(queryDoc);
-            Assert.IsTrue(actual.Count > 0);
+            var sg = QueryBuilderExtensions.ToGroupSeriesDocument();
+            var sp = QueryBuilderExtensions.ToProjectSeriesDocument();
+            //Console.Out.Write(md.ToString());
+            //Console.Out.Write(gd.ToString());
+            //Console.Out.Write(pd.ToString());
+
+            var queryDoc = new QueryDocument
+            {
+                CollectionName = "incumbent",
+                DataSourceLocation = "mongodb://localhost:27017",
+                DataSource = "hra"
+            };
+            queryDoc.Pipeline.Add(md);
+            queryDoc.Pipeline.Add(gd);
+            queryDoc.Pipeline.Add(pd);
+            queryDoc.Pipeline.Add(sg);
+            queryDoc.Pipeline.Add(sp);
+
+
+            //Console.Out.WriteLine(md.ToString());
+            //Console.Out.WriteLine(gd.ToString());
+            //Console.Out.WriteLine(pd.ToString());
+            //Console.Out.WriteLine(sg.ToString());
+            //Console.Out.WriteLine(sp.ToString());
+           
+             var target = GetTarget();
+            List<SeriesGrid> result = new List<SeriesGrid>();
+            target.GetData(queryDoc).ToList().ForEach(x =>
+            {
+                var item = new SeriesGrid();
+                item.Key = x["key"];
+                var values = x["f0"] as BsonArray;
+                item.Values = new List<List<object>>();
+                for (var i = 0; i < values.Count; i++)
+                {
+                    var valueList = new List<object>();
+                    valueList.Add(x["f0"][i]["s1"]);
+                    valueList.Add(x["f0"][i]["f0"]);
+                    item.Values.Add(valueList);
+                }
+                result.Add(item);
+            });
+        
+
+           Assert.IsTrue(result.Count > 0);
 
 
 
@@ -472,5 +512,10 @@ namespace Akron.Tests.Data
     //}
 }
 
+public class SeriesGrid
+{
+    public object Key { get; set; }
+    public List<List<object>> Values { get; set; }
+}
    
 

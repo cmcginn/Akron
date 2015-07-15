@@ -78,16 +78,44 @@ namespace Akron.Web.Services
             var service = new DataService();
             var result = service.GetQueryBuilder(collectionName);
             //TODO make Selectable
+            var year = new QueryField { Column = new DataColumnMetadata { ColumnName = "Year" }, SelectedValue = new QueryFieldValue { Key = "Year", Value = "Year" } };
             var jobFamily = new QueryField {Column = new DataColumnMetadata {ColumnName = "Job_Family"}, SelectedValue=new QueryFieldValue{ Key="Job_Family", Value="Job_Family"}};
-            var year = new QueryField {Column = new DataColumnMetadata {ColumnName = "Year"}, SelectedValue=new QueryFieldValue{ Key="Year", Value="Year"}};
+            
             var basePay = new QueryField { Column = new DataColumnMetadata { ColumnName = "Base_Pay" }, SelectedValue = new QueryFieldValue { Key = "Base_Pay", Value = "Base_Pay" } };
             var basePayMeasure = new MeasureDefinition {QueryField = basePay, Operation = AggregateOperations.Average};
-            result.AvailableSlicers.Add(jobFamily);
+           //default x
             result.AvailableSlicers.Add(year);
+            result.AvailableSlicers.Add(jobFamily);
+            
             result.AvailableMeasures.Add(basePayMeasure);
             return result;
         }
 
+        public List<SeriesXY> GetSeries(QueryBuilder builder)
+        {
+            var qd = builder.ToSeriesQueryDocument();
+            qd.CollectionName = "incumbent";
+            qd.DataSource = "hra";
+            qd.DataSourceLocation = "mongodb://localhost:27017";
+            var service = new DataService();
+            var result = new List<SeriesXY>();
+            service.GetData(qd).ToList().ForEach(x =>
+            {
+                var item = new SeriesXY();
+                item.Key = x["key"];
+                var values = x["f0"] as BsonArray;
+                item.Values = new List<SeriesValue>();
+                for (var i = 0; i < values.Count; i++)
+                {
+                    var seriesValue = new SeriesValue();
+                    seriesValue.Series = x["f0"][i]["s1"];
+                    seriesValue.Value = x["f0"][i]["f0"];
+                    item.Values.Add(seriesValue);
+                }
+                result.Add(item);
+            });
+            return result;
+        }
         public List<QueryFieldValue> GetFilteredQueryFieldValues(CascadeFilterModel model)
         {
             var service = new DataService();

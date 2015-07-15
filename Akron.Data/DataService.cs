@@ -42,17 +42,7 @@ namespace Akron.Data
             var db = client.GetDatabase(query.DataSource);
             var items = db.GetCollection<BsonDocument>(query.CollectionName);
 
-
-            var m = query.Match.ToMatchDocument();
-            var g  = query.Group.ToGroupDocument();
-            var p = query.Project;
-            
-            var pipeline = new[]
-                {
-                    m,
-                    g,
-                    p
-                };
+            var pipeline = query.Pipeline;
             var docs = items.AggregateAsync<BsonDocument>(pipeline).Result;
             var result = docs.ToListAsync<BsonDocument>().Result;
             return result;

@@ -11,22 +11,58 @@ namespace Akron.Data.Helpers
 {
     public static class QueryBuilderExtensions
     {
-
+        public static QueryDocument ToSeriesQueryDocument(this QueryBuilder source)
+        {
+            var result = source.ToQueryDocument();
+            result.Pipeline.Add(ToGroupSeriesDocument());
+            result.Pipeline.Add(ToProjectSeriesDocument());
+            return result;
+        }
         public static QueryDocument ToQueryDocument(this QueryBuilder source)
         {
             var result = new QueryDocument();
-            result.Group = new GroupDefinition();
-            result.Group.Measures = source.AvailableMeasures.Where(x => x.QueryField.SelectedValue != null).ToList();
-            //TODO refactor this, these do not have selected values
-            result.Group.Slicers = source.AvailableSlicers.Where(x => x.SelectedValue != null).ToList();
+            var match = new MatchDefinition();
+            match.Filters = source.AvailableQueryFields.Where(x => x.SelectedValue != null).ToList();
+            var group = new GroupDefinition();
+            group.Measures = source.AvailableMeasures.Where(x => x.QueryField.SelectedValue != null).ToList();
+            group.Slicers = source.AvailableSlicers.Where(x => x.SelectedValue != null).ToList();
+            var project = group.ToProjectionDocument();
 
-            result.Match = new MatchDefinition();
-            //TODO rename to available filters
-            result.Match.Filters = source.AvailableQueryFields.Where(x => x.SelectedValue != null).ToList();
-            result.Project = result.Group.ToProjectionDocument();
+            result.Pipeline.Add(match.ToMatchDocument());
+            result.Pipeline.Add(group.ToGroupDocument());
+            result.Pipeline.Add(project);
             return result;
         }
 
+        public static BsonDocument ToProjectSeriesDocument()
+        {
+            var result = new BsonDocument();
+            var projectElements = new List<BsonElement>();
+            //supressId
+            projectElements.Add(new BsonElement("_id", new BsonInt32(0)));
+            projectElements.Add(new BsonElement("key", new BsonString("$_id")));
+            projectElements.Add(new BsonElement("f0", new BsonString("$f0")));
+            result.Add(new BsonElement("$project", new BsonDocument(projectElements)));
+            return result;
+        }
+        public static BsonDocument ToGroupSeriesDocument()
+        {
+            var result = new BsonDocument();
+            var finalElements = new List<BsonElement>();
+            //first slicer will always be first element in ID representing x axis
+            finalElements.Add(new BsonElement("_id", new BsonString("$key.s0")));
+            //push first
+            var pushElements = new List<BsonElement>();
+            //second slicer will always be second element in Key
+            pushElements.Add(new BsonElement("s1", new BsonString("$key.s1")));
+            //value will always be first element in value
+            pushElements.Add(new BsonElement("f0", new BsonString("$value.f0")));
+            var pushElement = new BsonElement("$push", new BsonDocument(pushElements));
+            var pushField = new BsonElement("f0", new BsonDocument(pushElement));
+            finalElements.Add(pushField);
+            result.Add(new BsonElement("$group", new BsonDocument(finalElements)));
+            return result;
+        }
         public static BsonDocument ToMatchDocument(this MatchDefinition source)
         {
             var result = new BsonDocument();

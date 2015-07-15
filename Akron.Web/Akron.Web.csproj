@@ -177,6 +177,7 @@
     <Compile Include="ApiControllers\IncumbentController.cs" />
     <Compile Include="ApiControllers\QueryBuilderController.cs" />
     <Compile Include="ApiControllers\RJIController.cs" />
+    <Compile Include="ApiControllers\SeriesBuilderController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Models\CascadeFilterModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SeriesXY.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AkronService.cs" />
     <Compile Include="Startup.cs" />

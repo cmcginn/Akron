@@ -13,9 +13,18 @@ namespace Akron.Data.DataStructures
         public string CollectionName { get; set; }
         public string DataSourceLocation { get; set; }
         public string DataSource { get; set; }
-        public BsonDocument Project { get; set; }
-        public MatchDefinition Match { get; set; }
-        public GroupDefinition Group { get; set; }
-      
+
+        public List<BsonDocument> Pipeline
+        {
+            get { return _Pipeline ?? (_Pipeline = new List<BsonDocument>()); }
+            set { _Pipeline = value; }
+        }
+
+        private List<BsonDocument> _Pipeline;
+
+        //public BsonDocument Project { get; set; }
+        //public MatchDefinition Match { get; set; }
+        //public GroupDefinition Group { get; set; }
+
     }
 }

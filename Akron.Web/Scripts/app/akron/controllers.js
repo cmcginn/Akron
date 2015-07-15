@@ -34,8 +34,8 @@
 
             
             $scope.getData = function () {
-                console.log('WHWHWHW');
-                var getData = dataService.queryDataAsync($scope.queryBuilder);
+    
+                var getData = dataService.querySeriesAsync($scope.queryBuilder);
                 getData.then(function(data) {
                     console.log(data);
                 }, function() {});
