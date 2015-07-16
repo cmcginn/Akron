@@ -2,6 +2,7 @@
 angular.module('akron', [
     'ngRoute',
     'ui.bootstrap',
+    'isteven-multi-select',
     'akron.services',
     'akron.directives',
     'akron.controllers'

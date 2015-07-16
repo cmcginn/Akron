@@ -14,9 +14,25 @@
               
                 
             }
-        $scope.filterValueChange=function(filter) {
-            filter.active = !filter.active;
-        }
+        $scope.extraSettings = {
+                displayProp: 'key',
+                idProp: 'value',
+                externalIdProp: ''
+
+            },
+            $scope.filterTranslationTexts={
+                buttonDefaultText: 'Select Filters'
+            }
+        $scope.filterEvents = {
+                onItemSelect:function(item) {
+                    item.active = true;
+                },
+                onItemDeselect:function(item) {
+                    item.active = false;
+                }
+            }
+        $scope.filterSelection = [];
+       
             //filterSelection changed
             $scope.filterSelectionChange = function (selection) {
                 console.log(selection);

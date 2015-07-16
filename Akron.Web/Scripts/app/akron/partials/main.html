@@ -1,4 +1,6 @@
-﻿
+﻿<style>
+    .filterButton{ width: 300px;}
+</style>
     <!--<div class="row">
         <div class="col-xs-3" ng-repeat="availableSlicer in queryBuilder.availableSlicers">
             <div class="radio" ng-if="!availableSlicer.isDefault">
@@ -12,17 +14,41 @@
 
 
 <hr />
-<div class="row" ng-repeat="availableField in queryBuilder.availableFilters">
-    <div class="col-xs-12" ng-repeat="availableFilterValue in availableField.availableFilterValues">
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" ng-checked="availableFilterValue.active" ng-click="filterValueChange(availableFilterValue)">
-                {{availableFilterValue.key}}
-            </label>
+<div class="col-xs-12">
+    <div class="btn-group" ng-repeat="filter in queryBuilder.availableFilters">
+
+
+        <div class="col-xs-3">
+            <span>{{filter.column.displayName}}</span>
         </div>
-    </div>
+
+        <div class="col-xs-9">
+            <div class="filterButton" isteven-multi-select button-label="key" item-label="key" output-model="filterSelection" tick-property="false" input-model="filter.availableFilterValues"></div>
+        </div>
+
+
+     
+            
   
+
+
+    </div>
 </div>
+    <!--<div class="row" ng-repeat="filter in queryBuilder.availableFilters">
+
+            <div class="col-xs-3">
+                <span>{{filter.column.displayName}}</span>
+            </div>
+
+            <div ng-dropdown-multiselect="" translation-texts="filterTranslationTexts" events="filterEvents" options="filter.availableFilterValues" extra-settings="extraSettings" selected-model="filterSelection">Horse</div>
+
+
+    </div>-->
+    <!--<div ng-dropdown-multiselect="" events="events" options="example1data" extra-settings="extraSettings" selected-model="filterSelection"></div>
+    <div class="row" ng-repeat="filter in queryBuilder.availableFilters">
+        <div filter-select filter="filter" settings="extraSettings"></div>
+
+    </div>-->
     <!--<li ng-repeat="availableField in queryBuilder.availableFilters">
         <div class="row">
             <div class="col-xs-12">
@@ -30,7 +56,7 @@
                     <span>{{availableField.column.displayName}}</span>
                 </div>
                 <div class="col-xs-6">
-           
+
                     <select class="form-control" ng-change="filterSelectionChange(availableField)" ng-model="availableField.filterValue" ng-options="item.key for item in availableField.availableFilterValues track by item.value">
                         <option value="">All</option>
                     </select>
@@ -38,10 +64,10 @@
             </div>
         </div>
     </li>-->
-<div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-primary" ng-click="getData()">Get Data</button>
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-primary" ng-click="getData()">Get Data</button>
+        </div>
     </div>
-</div>
 
-  
+

@@ -815,6 +815,7 @@
     <Content Include="Content\vendor\amcharts\themes\light.js" />
     <Content Include="Content\vendor\amcharts\themes\patterns.js" />
     <Content Include="Content\vendor\amcharts\xy.js" />
+    <Content Include="Content\vendor\isteven-multi-select.css" />
     <Content Include="Content\vendor\ladda-themeless.css" />
     <Content Include="Content\vendor\ladda.css" />
     <Content Include="Index.html" />
@@ -849,9 +850,11 @@
     <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\angularjs-dropdown-multiselect.js" />
     <Content Include="Scripts\app\akron\app.js" />
     <Content Include="Scripts\app\akron\controllers.js" />
     <Content Include="Scripts\app\akron\directives.js" />
+    <Content Include="Scripts\app\akron\partials\templates\filterSelect.html" />
     <Content Include="Scripts\app\akron\partials\test.html" />
     <Content Include="Scripts\app\akron\partials\main.html" />
     <Content Include="Scripts\app\akron\partials\main.queryBuilder.html" />
@@ -1599,6 +1602,7 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="Scripts\isteven-multi-select.js" />
     <Content Include="Scripts\spin.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
