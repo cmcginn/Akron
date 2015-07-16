@@ -72,7 +72,11 @@ namespace Akron.Data.Helpers
             source.Filters.ForEach(f =>
             {
                 var colDoc = new BsonDocument();
-                var itemElm = new BsonElement("$eq", new BsonString(f.FilterValue.Value));
+                var selectedValues = new BsonArray();
+                var selectedFilterValues = f.SelectedFilterValues.Select(x => x.Value).Select(x => new BsonString(x)).ToList();
+                selectedValues.AddRange(selectedFilterValues);
+                //var itemE
+                var itemElm = new BsonElement("$in", selectedValues);
                 colDoc.Add(itemElm);
                 var colElm = new BsonElement(f.Column.ColumnName, colDoc);
                 matchFilterElements.Add(colElm);

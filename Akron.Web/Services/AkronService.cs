@@ -77,6 +77,7 @@ namespace Akron.Web.Services
             //var result = new QueryBuilder();
             var service = new DataService();
             var result = service.GetQueryBuilder(collectionName);
+            result.SelectedFilters.Add(result.AvailableFilters.First());
             //TODO make Selectable
            // var year = new DimensionDefinition { Column = new DataColumnMetadata { ColumnName = "Year" }, IsDefault=true};
             //var jobFamily = new DimensionDefinition {Column = new DataColumnMetadata {ColumnName = "Job_Family"}};

@@ -221,7 +221,7 @@ namespace Akron.Tests.Data
             });
 
             Task.WaitAll(tasks.ToArray());
-            Assert.IsFalse(queryBuilder.AvailableFilters.Any(x => x.FilterValue!=null));
+            Assert.IsFalse(queryBuilder.SelectedFilters.Any());
 
             var gd = new GroupDefinition();
      
@@ -270,9 +270,10 @@ namespace Akron.Tests.Data
             var jobTrack = source.AvailableFilters.Single(x => x.Column.ColumnName == "Job_Track");
 
             var matchBuilder = new FilterDefinitionBuilder<BsonDocument>();
-            jobFamily.FilterValue = new FilterValue {Key = "Executive", Value = "Executive"};
+            jobFamily.SelectedFilterValues.Add(new FilterValue {Key = "Executive", Value = "Executive"});
+ 
             var jobFamilyFilter = matchBuilder.All(jobFamily.Column.ColumnName,
-                new List<String> {jobFamily.FilterValue.Value});
+                jobFamily.SelectedFilterValues.Select(x=>x.Value).ToList());
             //take care of grouping key
             var groupDoc = new BsonDocument();
             var slicers = new List<BsonElement>();
@@ -395,10 +396,10 @@ namespace Akron.Tests.Data
         {
             var mf = new FilterDefinition
             {
-                Column = new DataColumnMetadata { ColumnName = "Job_Family", DataType = ColumnDataTypes.String },
-                FilterValue = new FilterValue { Key = "Health Care", Value = "Health Care" }
+                Column = new DataColumnMetadata { ColumnName = "Job_Family", DataType = ColumnDataTypes.String }
+               
             };
-
+            mf.SelectedFilterValues.Add(new FilterValue {Key = "Executive", Value = "Executive"});
             var matchDefinition = new MatchDefinition();
             matchDefinition.Filters.Add(mf);
 
@@ -412,7 +413,12 @@ namespace Akron.Tests.Data
             
             var matchDefinition = GetMatchDefinition();
             var groupDefinition = GetGroupDefinition();
-            matchDefinition.Filters.Clear();
+           // matchDefinition.Filters.Clear();
+            //matchDefinition.Filters.Add(new FilterDefinition
+            //{
+            //    Column = new DataColumnMetadata { ColumnName = "Legal" }
+            //});
+            matchDefinition.Filters.First().SelectedFilterValues.Add(new FilterValue {Key = "Legal", Value = "Legal"});
             var md = matchDefinition.ToMatchDocument();
             var gd = groupDefinition.ToGroupDocument();
             var pd = groupDefinition.ToProjectionDocument();
@@ -435,29 +441,29 @@ namespace Akron.Tests.Data
             queryDoc.Pipeline.Add(sp);
 
 
-            //Console.Out.WriteLine(md.ToString());
+           Console.Out.WriteLine(md.ToString());
             //Console.Out.WriteLine(gd.ToString());
             //Console.Out.WriteLine(pd.ToString());
             //Console.Out.WriteLine(sg.ToString());
             //Console.Out.WriteLine(sp.ToString());
-           
-             var target = GetTarget();
-            List<SeriesGrid> result = new List<SeriesGrid>();
-            target.GetData(queryDoc).ToList().ForEach(x =>
-            {
-                var item = new SeriesGrid();
-                item.Key = x["key"];
-                var values = x["f0"] as BsonArray;
-                item.Values = new List<List<object>>();
-                for (var i = 0; i < values.Count; i++)
-                {
-                    var valueList = new List<object>();
-                    valueList.Add(x["f0"][i]["s1"]);
-                    valueList.Add(x["f0"][i]["f0"]);
-                    item.Values.Add(valueList);
-                }
-                result.Add(item);
-            });
+
+           var target = GetTarget();
+           List<SeriesGrid> result = new List<SeriesGrid>();
+           target.GetData(queryDoc).ToList().ForEach(x =>
+           {
+               var item = new SeriesGrid();
+               item.Key = x["key"];
+               var values = x["f0"] as BsonArray;
+               item.Values = new List<List<object>>();
+               for (var i = 0; i < values.Count; i++)
+               {
+                   var valueList = new List<object>();
+                   valueList.Add(x["f0"][i]["s1"]);
+                   valueList.Add(x["f0"][i]["f0"]);
+                   item.Values.Add(valueList);
+               }
+               result.Add(item);
+           });
         
 
            Assert.IsTrue(result.Count > 0);

@@ -68,7 +68,7 @@ namespace Akron.Data
                 filterDefinition.Column = f;
                 if (!f.FilterDependencyColumns.Any())
                 {
-                    filterDefinition.AvailableFilterValues.Add(new FilterValue {Key = "All"});
+
                     FieldDefinition<BsonDocument, string> field = f.ColumnName;
 
                     var dd = Task<IAsyncCursor<string>>.Factory.StartNew(() =>
