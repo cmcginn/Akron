@@ -23,14 +23,10 @@
             $scope.filterTranslationTexts={
                 buttonDefaultText: 'Select Filters'
             }
-        $scope.filterEvents = {
-                onItemSelect:function(item) {
-                    item.active = true;
-                },
-                onItemDeselect:function(item) {
-                    item.active = false;
-                }
-            }
+        //$scope.filterSelect = function (item) {
+        //    console.log(item);
+        //    //item.active = true;
+        //}
         $scope.filterSelection = [];
        
             //filterSelection changed
