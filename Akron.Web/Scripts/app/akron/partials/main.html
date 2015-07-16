@@ -12,21 +12,32 @@
 
 
 <hr />
-    <li ng-repeat="availableField in queryBuilder.availableFilters">
+<div class="row" ng-repeat="availableField in queryBuilder.availableFilters">
+    <div class="col-xs-12" ng-repeat="availableFilterValue in availableField.availableFilterValues">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-checked="availableFilterValue.active" ng-click="filterValueChange(availableFilterValue)">
+                {{availableFilterValue.key}}
+            </label>
+        </div>
+    </div>
+  
+</div>
+    <!--<li ng-repeat="availableField in queryBuilder.availableFilters">
         <div class="row">
             <div class="col-xs-12">
                 <div class="col-xs-6">
                     <span>{{availableField.column.displayName}}</span>
                 </div>
                 <div class="col-xs-6">
-                    <!--<select class="form-control"  ng-model="selected" ng-options="item.key for item in availableField.availableValues"></select>-->
+           
                     <select class="form-control" ng-change="filterSelectionChange(availableField)" ng-model="availableField.filterValue" ng-options="item.key for item in availableField.availableFilterValues track by item.value">
                         <option value="">All</option>
                     </select>
                 </div>
             </div>
         </div>
-    </li>
+    </li>-->
 <div class="row">
     <div class="col-xs-12">
         <button class="btn btn-primary" ng-click="getData()">Get Data</button>

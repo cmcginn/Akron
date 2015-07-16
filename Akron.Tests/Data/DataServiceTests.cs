@@ -270,10 +270,10 @@ namespace Akron.Tests.Data
             var jobTrack = source.AvailableFilters.Single(x => x.Column.ColumnName == "Job_Track");
 
             var matchBuilder = new FilterDefinitionBuilder<BsonDocument>();
-            jobFamily.SelectedFilterValues.Add(new FilterValue {Key = "Executive", Value = "Executive"});
+            jobFamily.AvailableFilterValues.Add(new FilterValue {Key = "Executive", Value = "Executive", Active=true});
  
             var jobFamilyFilter = matchBuilder.All(jobFamily.Column.ColumnName,
-                jobFamily.SelectedFilterValues.Select(x=>x.Value).ToList());
+                jobFamily.AvailableFilterValues.Where(x=>x.Active).Select(x=>x.Value).ToList());
             //take care of grouping key
             var groupDoc = new BsonDocument();
             var slicers = new List<BsonElement>();
@@ -399,7 +399,7 @@ namespace Akron.Tests.Data
                 Column = new DataColumnMetadata { ColumnName = "Job_Family", DataType = ColumnDataTypes.String }
                
             };
-            mf.SelectedFilterValues.Add(new FilterValue {Key = "Executive", Value = "Executive"});
+            mf.AvailableFilterValues.Add(new FilterValue {Key = "Executive", Value = "Executive", Active=true});
             var matchDefinition = new MatchDefinition();
             matchDefinition.Filters.Add(mf);
 
@@ -418,7 +418,7 @@ namespace Akron.Tests.Data
             //{
             //    Column = new DataColumnMetadata { ColumnName = "Legal" }
             //});
-            matchDefinition.Filters.First().SelectedFilterValues.Add(new FilterValue {Key = "Legal", Value = "Legal"});
+            matchDefinition.Filters.First().AvailableFilterValues.Add(new FilterValue {Key = "Legal", Value = "Legal", Active=true});
             var md = matchDefinition.ToMatchDocument();
             var gd = groupDefinition.ToGroupDocument();
             var pd = groupDefinition.ToProjectionDocument();

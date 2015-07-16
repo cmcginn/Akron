@@ -95,6 +95,7 @@ namespace Akron.Web.Services
         public List<SeriesXY> GetSeries(QueryBuilder builder)
         {
             builder.SelectedSlicers.Insert(0, builder.AvailableSlicers.Single(x => x.IsDefault));
+            builder.SelectedSlicers.Add(builder.AvailableSlicers.FirstOrDefault(x => !x.IsDefault));
             builder.SelectedMeasures = new List<MeasureDefinition> {builder.AvailableMeasures.Single(x => x.IsDefault)};
             var qd = builder.ToSeriesQueryDocument();
             qd.CollectionName = "incumbent";

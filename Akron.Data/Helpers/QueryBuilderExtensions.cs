@@ -22,14 +22,14 @@ namespace Akron.Data.Helpers
         {
             var result = new QueryDocument();
             var match = new MatchDefinition();
-           
-            match.Filters = source.SelectedFilters;
+
+            match.Filters = source.AvailableFilters;
             var group = new GroupDefinition();
             group.Measures = source.SelectedMeasures;
             
             group.Dimensions = source.SelectedSlicers;
             var project = group.ToProjectionDocument();
-
+           
             result.Pipeline.Add(match.ToMatchDocument());
             result.Pipeline.Add(group.ToGroupDocument());
             result.Pipeline.Add(project);
@@ -69,11 +69,11 @@ namespace Akron.Data.Helpers
         {
             var result = new BsonDocument();
             var matchFilterElements = new List<BsonElement>();
-            source.Filters.ForEach(f =>
+            source.Filters.Where(x=>x.AvailableFilterValues.Any(y=>y.Active)).ToList().ForEach(f =>
             {
                 var colDoc = new BsonDocument();
                 var selectedValues = new BsonArray();
-                var selectedFilterValues = f.SelectedFilterValues.Select(x => x.Value).Select(x => new BsonString(x)).ToList();
+                var selectedFilterValues = f.AvailableFilterValues.Where(x=>x.Active).Select(x => x.Value).Select(x => new BsonString(x)).ToList();
                 selectedValues.AddRange(selectedFilterValues);
                 //var itemE
                 var itemElm = new BsonElement("$in", selectedValues);

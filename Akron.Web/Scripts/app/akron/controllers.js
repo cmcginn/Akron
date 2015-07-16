@@ -14,7 +14,9 @@
               
                 
             }
-        
+        $scope.filterValueChange=function(filter) {
+            filter.active = !filter.active;
+        }
             //filterSelection changed
             $scope.filterSelectionChange = function (selection) {
                 console.log(selection);
