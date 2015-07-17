@@ -92,26 +92,7 @@ namespace Akron.Web.Services
             return result;
         }
 
-        public List<BsonDocument> GetSeriesGrid(QueryBuilder builder)
-        {
-            builder.SelectedSlicers.Insert(0, builder.AvailableSlicers.Single(x => x.IsDefault));
-            //add default org type
-            if (builder.SelectedSlicers.Count == 1)
-                builder.SelectedSlicers.Add(
-                    builder.AvailableSlicers.SingleOrDefault(x => x.Column.ColumnName == "org_type"));
 
-
-            builder.SelectedMeasures = new List<MeasureDefinition> { builder.AvailableMeasures.Single(x => x.IsDefault) };
-            var qd = builder.ToQueryDocument();
-            qd.CollectionName = "incumbent";
-            qd.DataSource = "hra";
-            qd.DataSourceLocation = "mongodb://localhost:27017";
-            var service = new DataService();
-
-            var result = service.GetData(qd).ToList();
-    
-            return result;
-        }
         public List<BsonDocument> GetSeries(QueryBuilder builder)
         {
             //year column is default;
@@ -120,7 +101,7 @@ namespace Akron.Web.Services
             //add default org type
             if (builder.SelectedSlicers.Count == 1)
                 builder.SelectedSlicers.Add(
-                    builder.AvailableSlicers.SingleOrDefault(x => x.Column.ColumnName == "org_type"));
+                    builder.AvailableSlicers.SingleOrDefault(x => x.Column.ColumnName == "Job_Family"));
 
 
             builder.SelectedMeasures = new List<MeasureDefinition> {builder.AvailableMeasures.Single(x => x.IsDefault)};
