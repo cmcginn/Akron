@@ -97,7 +97,7 @@ namespace Akron.Data
 
         }
 
-        public List<FilterValue> GetFilteredQueryFields(string parentColumn, string dependentColumn, string parentValue)
+        public List<FilterValue> GetFilteredQueryFields(string parentColumn, string dependentColumn, List<string> parentColumnValues)
         {
             var result = new List<FilterValue>();
 
@@ -105,7 +105,7 @@ namespace Akron.Data
             var db = client.GetDatabase("hra");
             var collectionItems = db.GetCollection<BsonDocument>("incumbent");
             var tasks = new List<Task>();
-            var filter = Builders<BsonDocument>.Filter.Eq(parentColumn, parentValue);
+            var filter = Builders<BsonDocument>.Filter.In(parentColumn, parentColumnValues);
             FieldDefinition<BsonDocument, string> field = dependentColumn;
             var t = collectionItems.DistinctAsync<string>(field, filter);
             var z = Task.Factory.StartNew(() =>

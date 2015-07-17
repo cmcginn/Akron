@@ -10,16 +10,17 @@
         </div>
 
         <div class="col-xs-9">
-            <div class="filterButton" on-item-click="filterSelect(data)" isteven-multi-select button-label="key" item-label="key" output-model="filterSelection" tick-property="active" input-model="filter.availableFilterValues"></div>
+            <div class="filterButton" on-close="filterClose(filter)" isteven-multi-select button-label="key" item-label="key" output-model="filterSelection" tick-property="active" input-model="filter.availableFilterValues"></div>
         </div>
 
     </div>
 </div>
    
-    <div class="row">
-        <div class="col-xs-12">
-            <button class="btn btn-primary" ng-click="getData()">Get Data</button>
-        </div>
+<div class="row">
+    <div class="col-xs-12">
+        <button class="btn btn-primary" ng-click="getData()">Get Data</button>
     </div>
+</div>
 
 
+<div id="chartDiv"></div>

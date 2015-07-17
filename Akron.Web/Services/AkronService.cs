@@ -92,39 +92,52 @@ namespace Akron.Web.Services
             return result;
         }
 
-        public List<SeriesXY> GetSeries(QueryBuilder builder)
+        public List<BsonDocument> GetSeriesGrid(QueryBuilder builder)
         {
             builder.SelectedSlicers.Insert(0, builder.AvailableSlicers.Single(x => x.IsDefault));
-            builder.SelectedSlicers.Add(builder.AvailableSlicers.FirstOrDefault(x => !x.IsDefault));
+            //add default org type
+            if (builder.SelectedSlicers.Count == 1)
+                builder.SelectedSlicers.Add(
+                    builder.AvailableSlicers.SingleOrDefault(x => x.Column.ColumnName == "org_type"));
+
+
+            builder.SelectedMeasures = new List<MeasureDefinition> { builder.AvailableMeasures.Single(x => x.IsDefault) };
+            var qd = builder.ToQueryDocument();
+            qd.CollectionName = "incumbent";
+            qd.DataSource = "hra";
+            qd.DataSourceLocation = "mongodb://localhost:27017";
+            var service = new DataService();
+
+            var result = service.GetData(qd).ToList();
+    
+            return result;
+        }
+        public List<BsonDocument> GetSeries(QueryBuilder builder)
+        {
+            //year column is default;
+
+            builder.SelectedSlicers.Insert(0, builder.AvailableSlicers.Single(x => x.IsDefault));
+            //add default org type
+            if (builder.SelectedSlicers.Count == 1)
+                builder.SelectedSlicers.Add(
+                    builder.AvailableSlicers.SingleOrDefault(x => x.Column.ColumnName == "org_type"));
+
+
             builder.SelectedMeasures = new List<MeasureDefinition> {builder.AvailableMeasures.Single(x => x.IsDefault)};
             var qd = builder.ToSeriesQueryDocument();
             qd.CollectionName = "incumbent";
             qd.DataSource = "hra";
             qd.DataSourceLocation = "mongodb://localhost:27017";
             var service = new DataService();
-            var result = new List<SeriesXY>();
-            service.GetData(qd).ToList().ForEach(x =>
-            {
-                var item = new SeriesXY();
-                item.Key = x["key"];
-                var values = x["f0"] as BsonArray;
-                item.Values = new List<SeriesValue>();
-                for (var i = 0; i < values.Count; i++)
-                {
-                    var seriesValue = new SeriesValue();
-                    seriesValue.Series = x["f0"][i]["s1"];
-                    seriesValue.Value = x["f0"][i]["f0"];
-                    item.Values.Add(seriesValue);
-                }
-                result.Add(item);
-            });
+
+            var result = service.GetData(qd);
             return result;
         }
         public List<FilterValue> GetFilteredQueryFieldValues(CascadeFilterModel model)
         {
             var service = new DataService();
             var result = service.GetFilteredQueryFields(model.ParentColumnName, model.ColumnName,
-                model.ParentColumnValue);
+                model.ParentColumnValues.Select(x=>x.Value).ToList());
             return result;
         }
 

@@ -22,16 +22,18 @@ namespace Akron.Data.Helpers
         {
             var result = new QueryDocument();
             var match = new MatchDefinition();
-
-            match.Filters = source.AvailableFilters;
+            
+                match.Filters = source.AvailableFilters;
+        
             var group = new GroupDefinition();
             group.Measures = source.SelectedMeasures;
             
             group.Dimensions = source.SelectedSlicers;
             var project = group.ToProjectionDocument();
-           
-            result.Pipeline.Add(match.ToMatchDocument());
+            if (source.AvailableFilters.Any(x => x.AvailableFilterValues.Any(y => y.Active)))
+                result.Pipeline.Add(match.ToMatchDocument());
             result.Pipeline.Add(group.ToGroupDocument());
+
             result.Pipeline.Add(project);
             return result;
         }

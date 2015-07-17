@@ -7,6 +7,7 @@ using System.Web.Http;
 using Akron.Data;
 using Akron.Web.Models;
 using Akron.Web.Services;
+using MongoDB.Bson;
 
 namespace Akron.Web.ApiControllers
 {
@@ -26,7 +27,7 @@ namespace Akron.Web.ApiControllers
         }
 
         // POST: api/SeriesBuilder
-        public List<SeriesXY> Post(QueryBuilder value)
+        public List<BsonDocument> Post(QueryBuilder value)
         {
             var result = svc.GetSeries(value);
             return result;
