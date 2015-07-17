@@ -1,30 +1,47 @@
 ﻿<style>
-    .filterButton{ width: 300px;}
+    .filterButton {
+        width: 300px;
+    }
+
     #chartdiv {
         width: 100%;
-        height: 500px;
+        height: 800px;
     }
 </style>
 
-<div class="col-xs-12">
-    <div class="btn-group" ng-repeat="filter in queryBuilder.availableFilters">
 
-        <div class="col-xs-3">
-            <span>{{filter.column.displayName}}</span>
-        </div>
 
-        <div class="col-xs-9">
-            <div class="filterButton" on-close="filterClose(filter)" isteven-multi-select button-label="key" item-label="key" output-model="filterSelection" tick-property="active" input-model="filter.availableFilterValues"></div>
-        </div>
-
-    </div>
-</div>
-   
 <div class="row">
     <div class="col-xs-12">
         <button class="btn btn-primary" ng-click="getData()">Get Data</button>
     </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-8 col-md-12 ">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Title
+            </div>
+            <div class="panel-body">
+                <div class="col-xs-12">
+                    <div class="btn-group" ng-repeat="filter in queryBuilder.availableFilters">
+                        <div class="col-xs-3">
+                            <div class="col-xs-6">
+                                <span>{{filter.column.displayName}}</span>
+                            </div>
 
-<div id="chartdiv"></div>
+                            <div class="col-xs-6">
+                                <div class="filterButton" max-labels="3" on-close="filterClose(filter)" isteven-multi-select button-label="key" item-label="key" output-model="filterSelection" tick-property="active" input-model="filter.availableFilterValues"></div>
+                            </div> 
+                        </div>
+                       
+
+                    </div>
+                </div>
+                <div id="chartdiv"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

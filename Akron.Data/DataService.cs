@@ -66,8 +66,7 @@ namespace Akron.Data
                 var filterDefinition = new FilterDefinition();
 
                 filterDefinition.Column = f;
-                if (!f.FilterDependencyColumns.Any())
-                {
+               
 
                     FieldDefinition<BsonDocument, string> field = f.ColumnName;
 
@@ -84,7 +83,7 @@ namespace Akron.Data
                         return t.Result;
                     });
                     tasks.Add(dd);
-                }
+      
                 result.AvailableFilters.Add(filterDefinition);
             });
             result.AvailableSlicers = metadata.Dimensions.Select(x => new DimensionDefinition {Column = x, IsDefault = x.IsDefault}).ToList();

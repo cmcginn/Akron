@@ -11,6 +11,8 @@
 
 
             }
+            //filters modal
+
             //series grid
             $scope.seriesGrid = {
                 data:[],
@@ -52,6 +54,8 @@
                            "type": "serial",
                            "categoryField": "key",
                            "startDuration": 1,
+                           "sequencedAnimation": false,
+                           "startEffect": "easeInSine",
                            "categoryAxis": {
                                "gridPosition": "start"
                            },
@@ -73,7 +77,7 @@
                                {
                                    "id": "Title-1",
                                    "size": 15,
-                                   "text": "Chart Title"
+                                   "text": "Base Pay By Job Family"
                                }
                            ],
                            "dataProvider": $scope.seriesGrid.dataSource
@@ -164,4 +168,4 @@
             init();
 
         }
-    ]);
+    ])
