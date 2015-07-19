@@ -214,6 +214,8 @@
     <Content Include="app\css\theme-f.css" />
     <Content Include="app\css\theme-g.css" />
     <Content Include="app\css\theme-h.css" />
+    <Content Include="app\img\akron-logo.png" />
+    <Content Include="app\img\akronlogo.png" />
     <Content Include="app\js\custom.js" />
     <Content Include="app\img\logo-single.png" />
     <Content Include="app\img\logo.png" />

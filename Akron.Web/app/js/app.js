@@ -44,7 +44,7 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', f
   // Scope Globals
   // ----------------------------------- 
   $rootScope.app = {
-    name: 'Angle',
+    name: 'HRA-NCA Survey Portal',
     description: 'Angular Bootstrap Admin Template',
     year: ((new Date()).getFullYear()),
     layout: {

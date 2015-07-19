@@ -3,7 +3,7 @@
  * Define constants to inject across the application
  =========================================================*/
 App
-  .constant('APP_COLORS', {
+   .constant('APP_COLORS', {
       'primary': '#5d9cec',
       'success': '#27c24c',
       'info': '#23b7e5',
