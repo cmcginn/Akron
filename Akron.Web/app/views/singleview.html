@@ -1,0 +1,115 @@
+<style>
+    .filterButton {
+        width: 300px;
+    }
+
+    #chartdiv {
+        width: 300px;
+        min-height: 300px;
+        height: 300px;
+    }
+</style>
+<h3>
+   <!-- START Language list-->
+   <div class="pull-right">
+      <div dropdown="" is-open="language.listIsOpen" class="btn-group">
+         <button type="button" dropdown-toggle="" class="btn btn-default">{{language.selected}}
+            <span class="caret"></span>
+         </button>
+         <ul role="menu" class="dropdown-menu dropdown-menu-right animated fadeInUpShort">
+            <li ng-repeat="(localeId, langName) in language.available"><a ng-click="language.set(localeId, $event)">{{langName}}</a>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <!-- END Language list    -->
+   Single View
+   <small>{{ 'dashboard.WELCOME' | translate:{ appName: app.name } }} !</small>
+</h3>
+<div class="row">
+    <div ng-controller="MainController">
+        <style>
+            .filterButton {
+                width: 300px;
+            }
+
+            #chartdiv {
+                width: 100%;
+                min-height: 300px;
+                height: 600px;
+            }
+        </style>
+
+
+
+        <div filter-sloth></div>
+  
+        <div class="row">
+            <div class="col-lg-8 col-md-12 ">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span><strong>Base Pay/Year</strong></span>
+                            </div>
+                            <div class="col-xs-9">
+                                <div class="pull-right">
+                                    <a href="javascript:void(0)" ng-click="showFilterSelection()"><em class="fa fa-filter" style="color:#ffffff"></em></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" panel-refresh busy="gridStatusChange">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div id="chartdiv"></div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/ng-template" id="filterSelect">
+            <div class="row ngdialog-theme-default ngdialog-content">
+                <h3>Filter Selection</h3>
+                <div class="row" ng-repeat="filter in queryBuilder.availableFilters">
+
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <span>{{filter.column.displayName}}</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="filterButton" max-labels="3" on-close="filterClose(filter)" isteven-multi-select button-label="key" item-label="key" output-model="filterSelection" tick-property="active" input-model="filter.availableFilterValues"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-right">
+                        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="refreshGrid();closeThisDialog();">Apply Filters</button>
+                    </div>
+
+                </div>
+
+            </div>
+   
+
+
+        </script>
+   
+    </div>
+</div>
+

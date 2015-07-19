@@ -1,4 +1,6 @@
-﻿angular.module('akron.controllers', [])
+﻿var graphs;
+var dp;
+angular.module('akron.controllers', [])
     .controller('MainController', [
         '$scope','$modal', 'dataService', function ($scope, $modal, dataService) {
 
@@ -162,6 +164,7 @@
                         return f.column.filterDependencyColumns.length > 0;
                     });
                     $scope.queryBuilder = data;
+                    console.log('Refresh Grid');
                     $scope.refreshGrid();
 
                 }, function() {});

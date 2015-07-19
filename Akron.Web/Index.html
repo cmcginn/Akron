@@ -1,31 +1,32 @@
 ﻿<!DOCTYPE html>
-<html xmlns:ng="http://angularjs.org" ng-app="akron">
+<html lang="en" data-ng-app="myAppName">
 <head>
-    <title></title>
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="{{app.description}}">
+    <meta name="keywords" content="app, responsive, angular, bootstrap, dashboard, admin">
+    <title data-ng-bind="::pageTitle()">Angle - Angular Bootstrap Admin Template</title>
+    <!-- Bootstrap styles-->
+    <link rel="stylesheet" href="app/css/bootstrap.css" data-ng-if="!app.layout.isRTL">
+    <link rel="stylesheet" href="app/css/bootstrap-rtl.css" data-ng-if="app.layout.isRTL">
+    <!-- Application styles-->
+    <link rel="stylesheet" href="app/css/app.css" data-ng-if="!app.layout.isRTL">
+    <link rel="stylesheet" href="app/css/app-rtl.css" data-ng-if="app.layout.isRTL">
+    <!-- Themes-->
+    <link rel="stylesheet" ng-href="{{app.layout.theme}}" data-ng-if="app.layout.theme">
     <link href="Content/vendor/isteven-multi-select.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.structure.css">
 </head>
-<body>
-    <div ng-view></div>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.min.js"></script>
-
-    <script src="Scripts/jquery-1.10.2.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script src="Scripts/angular.min.js"></script>
-    <script src="Scripts/angular-route.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script>
-    <script src="Scripts/angular-ui/ui-bootstrap.min.js"></script>
-    <script src="Scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
-
-    <script src="Scripts/isteven-multi-select.js"></script>
+<body data-ng-class="{ 'layout-fixed' : app.layout.isFixed, 'aside-collapsed' : app.layout.isCollapsed, 'layout-boxed' : app.layout.isBoxed, 'layout-fs': app.useFullLayout, 'hidden-footer': app.hiddenFooter, 'layout-h': app.layout.horizontal, 'aside-float': app.layout.isFloat, 'offsidebar-open': app.offsidebarOpen, 'aside-toggled': app.asideToggled}">
+    <div data-ui-view="" data-autoscroll="false" class="wrapper"></div>
 
     <script src="/Content/vendor/amcharts/amcharts.js"></script>
     <script src="/Content/vendor/amcharts/serial.js"></script>
     <script src="/Content/vendor/amcharts/themes/light.js"></script>
-    <script src="Scripts/app/akron/services.js"></script>
-    <script src="Scripts/app/akron/controllers.js"></script>
-    <script src="Scripts/app/akron/directives.js"></script>
-    <script src="Scripts/app/akron/app.js"></script>
+    <script src="app/js/base.js"></script>
+
+    <script src="app/js/app.js"></script>
+    <script src="app/js/constants.js"></script>
+    <script src="app/js/config.js"></script>
+    <script src="app/js/custom.js"></script>
 </body>
 </html>
